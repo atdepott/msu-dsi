@@ -1,0 +1,146 @@
+body {
+	font-family: Verdana, Geneva, sans-serif;
+	-moz-box-sizing: border-box;   
+    -webkit-box-sizing: border-box;   
+    box-sizing: border-box;  
+}
+
+html, body {
+	height: 97%;
+	width: 98%;
+	margin: 1%;
+	background-color: #DAE3FF;
+    font-size: 12px;
+}
+
+#leftPane {
+	width: 20%;
+	padding: 0px;
+}
+
+.title-style {
+	background-color: #A2B9FF;
+	font-family: Verdana, Geneva, sans-serif;
+	color: #FFFFFF;
+	font-size: 16px;
+	text-align: center;
+    padding: 7px;
+}
+
+.tool-title-style {
+    display:block;
+    margin-top: 2px;
+    background-color: #B0B0B0;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 14px;
+    /*font-family: Verdana, Geneva, sans-serif;
+    font-size: 18px;*/
+    /*font-weight: normal;*/
+    padding: 2px;
+    /*padding-bottom: 0px;*/
+
+	/*background-color: #B0B0B0;
+	font-family: Verdana, Geneva, sans-serif;
+	color: #FFFFFF;
+	font-size: 16px;
+	text-align: center;
+    padding: 7px;*/
+}
+
+#map {
+	padding: 0px;
+}
+
+#topPane {
+	border: 0px;
+	background-color: #5983FF;
+	font-family: Verdana, Geneva, sans-serif;
+	color: #FFFFFF;
+	font-size: 35px;
+}
+
+.toolbutton {
+    background-color: #A2B9FF;
+	color: #FFFFFF;
+	font-size: 16px;
+	text-align: center;
+    padding: 4px;
+}
+
+#toolsPane {
+    margin-left:auto;
+    margin-right:auto;
+    width:80%;
+}
+
+.dialogClass .ui-widget-header {
+	background: #A2B9FF;
+	font-family: Verdana, Geneva, sans-serif;
+	color: #FFFFFF;
+	font-size: 16px;
+    font-weight: normal;
+	text-align: center;
+    padding: 7px;
+    border: 0px;
+    margin: 0px;
+    border-radius: 0px;
+}
+
+.dialogClass .ui-dialog-content {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 14px;
+    padding: 4px;
+}
+
+.darkClass
+{
+    background-color: white;
+    filter:alpha(opacity=50); /* IE */
+    opacity: 0.5; /* Safari, Opera */
+    -moz-opacity:0.50; /* FireFox */
+    z-index: 20;
+    height: 100%;
+    width: 100%;
+    background-repeat:no-repeat;
+    background-position:center;
+    position:absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.helpClass {
+    padding-top: 0px;
+    font-size: 16px;
+    color:white;
+}
+
+.esriLegendServiceLabel {
+    font-weight: normal;
+}
+
+.esriLegendLayerLabel {
+    display:none;
+}
+
+#BasemapToggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 50;
+    }
+
+#results {
+    display: none;
+    width:100%;
+    margin-top: 2px;
+    border-width: 3px;
+    border-style: solid;
+    background-color: #F5F071;
+}
+
+#sliderDiv {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 10px;
+}

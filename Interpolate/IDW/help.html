@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Help</title>
+    <link rel="stylesheet" href="styles/main.css">
+    
+</head>
+
+<body>
+    <div id="content"
+         data-dojo-type="dijit/layout/BorderContainer"
+         data-dojo-props="design:'headline', gutters:true"
+         style="width: 100%; height: 100%; margin: 0;">
+        <div id="topPane"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'top'">
+            <div id="title" data-dojo-type="dijit/layout/ContentPane">
+                Surface Interpolation Tool Help
+            </div>
+        </div>
+        <div id="helpcontent"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'center'">
+            <p>
+                This application performs interpolation for a small set of data points to create a surface.  
+                For more information on interpolation and the different interpolation methods offered here, 
+                please click <a href="http://resources.arcgis.com/en/help/main/10.2/index.html#//00q900000093000000" target="_blank">here</a>.
+            </p>
+            <h3>Create Surface</h3>
+            <h4>Step 1</h4>
+            <p>
+                Click the "Choose File" button and navigate to a csv file that contains at the minimum a latitude or Y 
+                column, a longitude or X column, and a value column.
+            </p>
+            <img src="styles/helpimages/step1.png" />
+            <p>
+                A popup will appear.  Choose the column for the latitude, longitude, and value that you wish to map 
+                and click "Ok".
+            </p>
+            <img src="styles/helpimages/step1B.png" />
+            <p>
+                Your points should be mapped.  To view the value for each point, click on it.
+            </p>
+            <img src="styles/helpimages/step1C.png" />
+            <h4>Step 2</h4>
+            <p>
+                Click either "Create Surface".  
+                A popup should appear where you can optionally choose additional parameters.
+                Click "Create Surface".
+            </p>
+            <img src="styles/helpimages/step2_IDW.png" />
+            <h4>Results</h4>
+            <p>
+                A surface layer should be added to your map.
+                You can download this layer as a TIF raster by clicking the "Download Raster Data" button.  
+                This data is intended to be used in ArcMap or other GIS platforms. You can also clear 
+                the map to begin with a new dataset by clicking the "Clear" button or clear only your uploaded points
+                by clicking the "Clear Points" button.
+            </p>
+            <img src="styles/helpimages/results.png" />
+            <h3>Surface Transparency</h3>
+            <p>
+                Adjust the transparency of your surface result by dragging this slider.
+            </p>
+            <img src="styles/helpimages/transparency.png" />
+            <h3>Legend</h3>
+            <p>
+                The legend will automatically populate when you create a surface.
+            </p>
+            <img src="styles/helpimages/legend.png" />
+            <h3>Basemap picker</h3>
+            <p>
+                Click the basemap button to toggle between the topographic basemap and a satellite imagery basemap.
+            </p>
+            <img src="styles/helpimages/basemap.png"/>
+        </div>
+    </div>
+</body>
+
+</html>

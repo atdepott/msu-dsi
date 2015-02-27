@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+
+    <title>Title</title>
+
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/dojo/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/layercontrol.css">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.min.css">
+
+    <script type="text/javascript">
+        var package_path = location.pathname.substring(0, location.pathname.lastIndexOf('/')).replace("/\/[^/]+$/", "");
+        var dojoConfig = {
+            // enable us to load the api from a CDN and load local modules from the correct location
+            packages: [{
+                name: "app",
+                location: package_path + '/scripts/Modules'
+            }, {
+                name: "appConfig",
+                location: package_path + '/config'
+            }]
+        };
+    </script>
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="config/cropLayers.js"></script>
+</head>
+
+<body class="claro">
+    <!--[if IE 7]>
+    <style>
+      html, body {
+        margin: 0;
+      }
+    </style>
+    <![endif]-->
+    <div id="content"
+         data-dojo-type="dijit/layout/BorderContainer"
+         data-dojo-props="design:'headline', gutters:true"
+         style="width: 100%; height: 100%; margin: 0;">
+        
+        <div id="topPane"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'top'">
+            <div id="title" data-dojo-type="dijit/layout/ContentPane">
+                Title
+            </div>
+            <!--<span style="float: right"><a class="helpClass" href="help.html" target="_blank">Help</a></span>-->
+        </div>
+
+        <div id="leftPane"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'left'">
+            
+            <div data-dojo-type="dijit/layout/ContentPane"
+                 data-dojo-props="region:'center'">
+
+                <div class="title-style">Production Tools</div>
+                
+                <div>
+                    <span class="tool-title-style">Step 1</span>
+                    <label for="cropLayerInput">Choose a crop:</label>
+                    <select id="cropLayerInput" style="width:100%;">
+                        <option value="-1">CHOOSE</option>
+                    </select>
+                </div>
+
+                <div>
+                    <span class="tool-title-style">Step 2</span>
+                    <span style="display:block; text-align:center; width:100%;">
+                        <input id="bufferButton" type="button" value="Choose Point" class="toolbutton" />
+                        <input id="polygonButton" type="button" value="Draw Polygon" class="toolbutton" />
+                    </span>
+                    <span style="font-weight:bold">Results</span>
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="pixelCount">Pixel Count:</label>
+                            </td>
+                            <td>
+                                <div id="pixelCount"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="prodValue">Total Production 2000:</label>
+                            </td>
+                            <td>
+                                <div id="prodValue"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div>
+                    <span class="tool-title-style">Step 3</span>
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="prodIncreaseValue">Production Increase:</label>
+                            </td>
+                            <td>
+                                <input type="text" id="prodIncreaseValue" value="5" style="width:25px;" />%
+                            </td>
+                        </tr>
+                    </table>
+                    <div id="prodIncreaseSlider"></div>
+                    <span style="display:block; text-align:center; width:100%;">
+                        <input id="increaseProdButton" type="button" value="Find Future Production" class="toolbutton" />
+                    </span>
+                    <span style="font-weight:bold">Results</span>
+                    <table><tr><td>Increased Production:</td><td><div id="increaseProdValue"></div></td></tr></table>
+                </div>
+                
+                <div>
+
+                </div>
+                    <span class="tool-title-style">Restart</span>
+                    <span style="display:block; text-align:center; width:100%;">
+                        <input id="clearButton" type="button" value="Clear" class="toolbutton" />
+                    </span>
+                </div>
+            <div data-dojo-type="dijit/layout/ContentPane"
+                 data-dojo-props="region:'center'">
+                <div class="title-style">Legend</div>
+                <div id="legendDiv"></div>
+            </div>
+
+            <div data-dojo-type="dijit/layout/ContentPane"
+                 data-dojo-props="region:'center'">
+                <div id="metadataTitle"class="title-style">Data Source</div>
+                <span style="display:block; text-align:center; width:100%;">
+                    <input id="metadataButton" type="button" value="Toggle Citation" class="toolbutton" />
+                </span>
+                <div id="metadataContent" style="display:none">
+                    <p>
+                        HarvestChoice, 2011. "Agricultural production, yield and harvested area (2000)." 
+                        International Food Policy Research Institute, Washington, DC., and University of Minnesota, 
+                        St. Paul, MN. Available online at <a href="http://harvestchoice.org/maps">http://harvestchoice.org/maps</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="map"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'center'"
+             style="overflow:hidden;">
+            <div id="BasemapToggle"></div>
+        </div>
+
+        <!--JQuery Dialogs-->
+        <!--<div id="metadataDialog" title="Info">
+            <div id="metadataContent"></div>
+        </div>-->
+        <div id="bufferDialog" title="Find Existing Production">
+            <table>
+                <tr>
+                    <td><label for="bufferDistanceInput">Distance:</label></td>
+                    <td><input id="bufferDistanceInput" value="10" /></td>
+                </tr>
+                <tr>
+                    <td><label for="bufferUnitInput">Units:</label></td>
+                    <td>
+                        <select id="bufferUnitInput">
+                            <option value="MI">Miles</option>
+                            <option value="KM">Kilometers</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,1 @@
+These scripts require CherryPy 3.2.4 to be installed

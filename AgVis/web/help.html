@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Help</title>
+    <link rel="stylesheet" href="styles/main.css">
+    
+</head>
+
+<body>
+    <div id="content"
+         data-dojo-type="dijit/layout/BorderContainer"
+         data-dojo-props="design:'headline', gutters:true"
+         style="width: 100%; height: 100%; margin: 0;">
+        <div id="topPane"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'top'">
+            <div id="title" data-dojo-type="dijit/layout/ContentPane">
+                Africa Crop Production Level
+            </div>
+        </div>
+        <div id="helpcontent"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'center'">
+            <p>
+                The tool calculates production levels for average, rainfed, and irrigated crops at any point in Africa.
+            </p>
+            <h3>Production Tools</h3>
+            <h4>Step 1</h4>
+            <p>
+                Select a crop from the Step 1 drop-down menu.  The raster should be displayed on the map.  Consult the legend for more information
+                on this visualization.
+            </p>
+            <img src="styles/helpimages/choosecrop.png"/>
+            <h4>Step 2</h4>
+            <p>
+                Click either the "Choose Point" or the "Draw Polygon" buttons.
+            </p>
+            <img src="styles/helpimages/step2.png"/>
+            <p>
+                The "Choose Point" button will open a dialog box.  Enter a distance and choose either Miles or Kilometers, then click "Choose Point".
+                Now, click on the map.  A buffer of the specified distance will be drawn around your point.
+            </p>
+            <img src="styles/helpimages/choosepoint.png" /><br/>
+            <img src="styles/helpimages/choosepointresult.png" />
+            <p>
+                The "Draw Polygon" button will start the draw polygon process.  Click on the map to start drawing and double-click to auto-complete
+                the polygon.
+            </p>
+            <img src="styles/helpimages/choosepolyresult.png" />
+            <p>
+                Once you have selected your area of interest (either by clicking a point or completing a polygon), the application will calculate 
+                the number of pixels that fall within your area and the total production.  All pixels with a centroid within your area of interest 
+                will be included in these results.  Results will be shown in the left panel, under the "Choose Point" and "Draw Polygon" buttons.
+            </p>
+            <img src="styles/helpimages/step2results.png" />
+            <h4>Step 3</h4>
+            <p>
+                Either enter a percentage value for future production increase in the "Production Increase" text box or drag the slider until 
+                the text box shows the correct production increase.  Click "Find Future Production".
+            </p>
+            <p>
+                The application will calculate future production values and display the results in the left panel, under the "Find Future Production" button.
+            </p>
+            <img src="styles/helpimages/step3.png" />
+            <h4>Restart</h4>
+            <p>
+                To choose another crop, area of interest, or future production value, click "Clear" and the application should return to its original state.
+            </p>
+            <h3>Legend</h3>
+            <p>
+                The legend displays information on the crop layer that was chosen in Step 1 of the Production Tools workflow.
+            </p>
+            <img src="styles/helpimages/legend.png"/>
+            <h3>Data Source</h3>
+            <p>
+                To view data citations, click the "Toggle Citation" button.
+            </p>
+            <img src="styles/helpimages/citation.png" />
+        </div>
+    </div>
+</body>
+
+</html>

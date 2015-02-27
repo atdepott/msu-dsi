@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+
+    <title>Title</title>
+
+    <link rel="stylesheet" href="//js.arcgis.com/3.12/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="//js.arcgis.com/3.12/esri/css/esri.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.min.css">
+
+    <script type="text/javascript">
+        var package_path = location.pathname.substring(0, location.pathname.lastIndexOf('/')).replace("/\/[^/]+$/", "");
+        var dojoConfig = {
+            // enable us to load the api from a CDN and load local modules from the correct location
+            packages: [{
+                name: "app",
+                location: package_path + '/scripts/Modules'
+            }, {
+                name: "appConfig",
+                location: package_path + '/config'
+            }]
+        };
+    </script>
+    <script src="//js.arcgis.com/3.12/"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <script src="scripts/jquery.linkify.min.js"></script>
+    <script src="scripts/main.js"></script>
+</head>
+
+<body class="claro">
+    <!--[if IE 7]>
+    <style>
+      html, body {
+        margin: 0;
+      }
+    </style>
+    <![endif]-->
+    <div id="content"
+         data-dojo-type="dijit/layout/BorderContainer"
+         data-dojo-props="design:'headline', gutters:true"
+         style="width: 100%; height: 100%; margin: 0;">
+        
+        <div id="topPane"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'top'">
+            <div id="title" data-dojo-type="dijit/layout/ContentPane">
+                Title
+            </div>
+            <!--<span style="float: right"><a class="helpClass" href="help.html" target="_blank">Help</a></span>-->
+        </div>
+
+        <div id="leftPane"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'left'">
+            
+            <div> 
+                <div class="title-style">Description</div>
+                <p>Text here</p>
+            </div>
+
+            <div>
+                <div class="title-style">Legend</div>
+                <div id="legendDiv"></div>
+            </div>
+
+            
+            <div id="editLayerDiv">
+                <div class="title-style">Edit Layer</div>
+                <div id="editButtons">
+                    <div id="signIn">
+                        <span style="display:block; text-align:center; width:100%;">
+                            <button id="signInButton">Sign In</button>
+                            </span>
+                    </div>
+                    <div id="startEditing" style="display:none">
+                        <span style="display:block; text-align:center; width:100%;">
+                            <button id="startEditingButton">Start Editing</button>
+                        </span>
+                    </div>
+                    <div id="stopEditing" style="display:none">
+                        <span style="display:block; text-align:center; width:100%;">
+                            <button id="stopEditingButton">Stop Editing</button>
+                        </span>
+                    </div>
+                </div>
+                <!--editor div gets dynamically added here-->
+            </div>
+            
+        </div>
+        
+        <div id="map"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'center'"
+             style="overflow:hidden;">
+            <div id="BasemapToggle"></div>
+            <div id="search"></div>
+        </div>
+
+        <!--JQuery Dialogs, Etc.-->
+        <div id="infowindow"></div>
+        <div id="popupDiv"></div>
+
+    </div>
+</body>
+
+</html>

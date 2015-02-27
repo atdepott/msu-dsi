@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+
+    <title>Title</title>
+
+    <link rel="stylesheet" href="http://js.arcgis.com/3.8/js/dojo/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="http://js.arcgis.com/3.8/js/esri/css/esri.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/layercontrol.css">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.min.css">
+
+    <script type="text/javascript">
+        var package_path = location.pathname.substring(0, location.pathname.lastIndexOf('/')).replace("/\/[^/]+$/", "");
+        var dojoConfig = {
+            // enable us to load the api from a CDN and load local modules from the correct location
+            packages: [{
+                name: "app",
+                location: package_path + '/scripts'
+            }, {
+                name: "appConfig",
+                location: package_path + '/config'
+            }]
+        };
+    </script>
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+        <script>
+            $(function () {
+                $("#metadataDialog").dialog({
+                    height: 200,
+                    dialogClass: 'dialogClass',
+                    autoOpen: false
+                });
+                $("#bufferDialog").dialog({
+                    autoOpen: false,
+                    height: 200,
+                    modal: true,
+                    dialogClass: 'dialogClass',
+                    buttons: {
+                        "Buffer": function () {
+                            var distanceVal = parseFloat($("#bufferDistanceInput").val());
+
+                            if (distanceVal > 0) {
+                                bufferFeature(distanceVal, $("#bufferUnitInput").val());
+                                $(this).dialog("close");
+                            }
+                        },
+                        Cancel: function () {
+                            $(this).dialog("close");
+                        }
+                    },
+                    close: function () {
+                        //$("#bufferDistanceInput").val("10");
+                    }
+                });
+
+                initTravelTimeTool("travelTimeDialog", "ttCitySizeInput", "ttBufferDistanceInput", "ttBufferUnitInput");
+            });
+
+            
+    </script>
+    <script src="scripts/main.js"></script>
+</head>
+
+<body class="claro">
+    <!--[if IE 7]>
+    <style>
+      html, body {
+        margin: 0;
+      }
+    </style>
+    <![endif]-->
+    <div id="content"
+         data-dojo-type="dijit/layout/BorderContainer"
+         data-dojo-props="design:'headline', gutters:true"
+         style="width: 100%; height: 100%; margin: 0;">
+        
+        <div id="topPane"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'top'">
+            <!--filled dynamically based on config-->
+            <div id="title" data-dojo-type="dijit/layout/ContentPane">
+                Title
+            </div>
+            <span style="float: right"><a class="helpClass" href="help.html" target="_blank">Help</a></span>
+        </div>
+
+        <div id="leftPane"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'left'">
+            <div class="darkClass" style="display:none"></div>
+            <div data-dojo-type="dijit/layout/ContentPane"
+                 data-dojo-props="region:'center'">
+                <div id="LayerControlTitle" class="title-style">Layer Control</div>
+                <div>
+                    <h3><span class='css-layergroup'>Population</span></h3>
+                    <input id="input_globalpopulation" checked="checked" class="css-layercheckbox" type="checkbox" onclick="onLayerClick('globalpopulation');" />
+                    <label id="label_globalpopulation" for="input_globalpopulation" class="css-layerlabel css-layerlabel-selected">
+                        <span style="float: left">Population Density</span><span style="float: right"><a id="globalPopMetadata" href="#">Metadata</a></span>
+                    </label>
+                    <div data-role="content" class="legendWrapper">
+                        <div id="populationLegendDiv"></div>
+                    </div>
+                    
+                    <input id="input_globalcities" checked="checked" class="css-layercheckbox" type="checkbox" onclick="onLayerClick('globalcities');" />
+                    <label id="label_globalcities" for="input_globalcities" class="css-layerlabel css-layerlabel-selected">
+                        <span style="float: left">Cities</span><span style="float: right"><a id="globalCitiesMetadata" href="#">Metadata</a></span>
+                    </label>
+                    <div data-role="content" class="legendWrapper">
+                        <div id="citiesLegendDiv"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="toolsPane"
+                 data-dojo-type="dijit/layout/ContentPane"
+                 data-dojo-props="region:'bottom'">
+                <input type="button" value="Find Travel Time" class="toolbutton" onclick="startTravelTimeTool();">
+                <input type="button" value="Clear Travel Time" class="toolbutton" onclick="clearGraphics();"><br />
+                <!--<div>
+                    <label for="travelTimeDisplay">Travel Time:</label><br/>
+                    <span id="travelTimeDisplay"></span>
+                </div>-->
+            </div>
+        </div>
+        
+        <div id="map"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'center'"
+             style="overflow:hidden;">
+        </div>
+
+        <div id="map-google"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'center'"
+             style="overflow:hidden; display:none;">
+            <!--<div id="google-exit"></div>-->
+        </div>
+
+        <div data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'bottom'"
+             style="height:45px; overflow:hidden;">
+            <div id="timeSliderDiv"></div>
+        </div>
+
+        <!--JQuery Dialogs-->
+        <div id="metadataDialog" title="Info">
+            <div id="metadataContent"></div>
+        </div>
+        <div id="bufferDialog" title="Buffer">
+            <table>
+                <tr>
+                    <td><label for="bufferDistanceInput">Distance:</label></td>
+                    <td><input id="bufferDistanceInput" value="10" /></td>
+                </tr>
+                <tr>
+                    <td><label for="bufferUnitInput">Units:</label></td>
+                    <td>
+                        <select id="bufferUnitInput">
+                            <option value="MI">Miles</option>
+                            <option value="KM">Kilometers</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="travelTimeDialog" title="Find Travel Time">
+            <table>
+                <tr>
+                    <td><label for="ttCitySizeInput">City Size:</label></td>
+                    <td>
+                        <select id="ttCitySizeInput">
+                            <option value="20K">20K - 50K</option>
+                            <option value="50K">50K - 100K</option>
+                            <option value="100K">100K - 250K</option>
+                            <option value="250K">250K - 500K</option>
+                            <option value="500K">500K+</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="ttBufferDistanceInput">Distance:</label></td>
+                    <td><input id="ttBufferDistanceInput" value="50" /></td>
+                </tr>
+                <tr>
+                    <td><label for="ttBufferUnitInput">Units:</label></td>
+                    <td>
+                        <select id="ttBufferUnitInput">
+                            <option value="MI">Miles</option>
+                            <option value="KM">Kilometers</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <a id="invisibleLink" style="display:none;"></a>
+</body>
+
+</html>

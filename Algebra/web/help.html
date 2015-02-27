@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Help</title>
+    <link rel="stylesheet" href="styles/main.css">
+    
+</head>
+
+<body>
+    <div id="content"
+         data-dojo-type="dijit/layout/BorderContainer"
+         data-dojo-props="design:'headline', gutters:true"
+         style="width: 100%; height: 100%; margin: 0;">
+        <div id="topPane"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'top'">
+            <div id="title" data-dojo-type="dijit/layout/ContentPane">
+                Map Algebra Tool Help
+            </div>
+        </div>
+        <div id="helpcontent"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'center'">
+            <p>
+                This tool is an exploratory tool which performs simple calculations on multiple map layers for a small area of interest.
+            </p>
+            <h3>Map Algebra</h3>
+            <p>
+                This tool allows you to perform simple calculations on multiple map layers for a defined area of interest.
+            </p>
+            <h4>Step 1</h4>
+            <p>
+                Click on the "Choose Rasters" button.  A window will open listing all available categories.  
+                Each category will expand when clicked to show layers of interest.  Choose the layers that you will want to use in your calculations.
+                For more information on the data, click the "Description" link to display layer source information and metadata.
+            </p>
+            <img src="styles/helpimages/chooserasters.png" />
+            <h4>Step 2</h4>
+            <p>
+                Click on the "Build an Expression" button to open the Expression Chooser window.  To add an expression, click the "Add Expression" button to open 
+                the Custom Expression window.  
+            </p>
+            <img src="styles/helpimages/expressionchooser1.png" />
+            <p>
+                Choose a right layer or expression by clicking the dropdown, select one of the operators (addition, subtraction, multiplication,
+                or division) and a left layer or expression.  Your expression will be displayed in the textbox below.  Add the expression by clicking
+                the "Add" button.
+            </p>
+            <img src="styles/helpimages/customexpression.png" />
+            <p>
+                You can add more expressions in the same way or chain expressions together by choosing a custom expression as your right or left argument.
+                Once you have built your final expression, select it by clicking on the title.  You will see the full expression expanded in the textbox below.
+                Click the "Choose" button to select this expression.
+            </p>
+            <img src="styles/helpimages/expressionchooser2.png" />
+            <h4>Step 3</h4>
+            <p>
+                Click either the "Choose Point" or the "Draw Polygon" buttons.
+            </p>
+            <p>
+                The "Choose Point" button will open a dialog box.  Select a distance and choose either Miles or Kilometers, then click "Choose Point".
+                Now, click on the map.  A buffer of the specified distance will be drawn around your point and your expression will be calculated.
+            </p>
+            <img src="styles/helpimages/buffer.png" /> <br/>
+            <img src="styles/helpimages/bufferresult.png" />
+            <p>
+                The "Draw Polygon" button will start the draw polygon process.  Click on the map to start drawing and double-click to auto-complete
+                the polygon and perform your calculation.
+            </p>
+            <img src="styles/helpimages/polygon.png" />
+            <h4>Results</h4>
+            <p>
+                The results of your calculation will be displayed on the map and statistics will be displayed in the left panel under the "Results" section.
+                You can download the results of this calculation as a TIF raster by clicking the "Download Raster Data" button.  This data is intended to be used
+                in ArcMap or other GIS platforms.  You can also clear the map to begin with a new calculation by clicking the "Clear" button.
+            </p>
+            <img src="styles/helpimages/results.png" />
+            <h3>Layer Picker</h3>
+            <p>
+                Choose a layer to display by selecting it from the layer picker drop-down.
+            </p>
+            <img src="styles/helpimages/layers.png" />
+            <h3>Legend</h3>
+            <p>
+                The will automatically populate when a layer is added or removed from the map, including custom layers that are the result of calculations.
+            </p>
+            <img src="styles/helpimages/legend.png" />
+            <h3>Data Source</h3>
+            <p>
+                Click the "Toggle Citation" button for more information on the source data used in the application.
+            </p>
+            <img src="styles/helpimages/citation.png" />
+            <h3>Basemap picker</h3>
+            <p>
+                Click the basemap button to toggle between the topographic basemap and a satellite imagery basemap.
+            </p>
+            <img src="styles/helpimages/basemap.png"/>
+        </div>
+    </div>
+</body>
+
+</html>

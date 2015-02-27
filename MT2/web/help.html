@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Help</title>
+    <link rel="stylesheet" href="styles/main.css">
+    
+</head>
+
+<body>
+    <div id="content"
+         data-dojo-type="dijit/layout/BorderContainer"
+         data-dojo-props="design:'headline', gutters:true"
+         style="width: 100%; height: 100%; margin: 0;">
+        <div id="topPane"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'top'">
+            <div id="title" data-dojo-type="dijit/layout/ContentPane">
+                Market Travel Time Calculator Help
+            </div>
+        </div>
+        <div id="helpcontent"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'center'">
+            <p>
+                This application performs travel time calculations from cities to a chosen point and visualizes time-dependant
+                population data.  These two main functions are explained in greater detail below.
+            </p>
+            <h3>Travel Time Tools</h3>
+            <h4>Step 1</h4>
+            <p>
+                To calculate the travel time from cities to a chosen point, click the "Find Travel Time" button.
+                A popup will show with inputs for city size and buffer distance parameters.  Enter your parameters and click OK.
+            </p>
+            <img src="styles/helpimages/TravelTime_step1.png"/>
+            <h4>Step 2</h4>
+            <p>
+                Click on the map.  After a few moments, the map will be replaced with a travel time map showing all cities of 
+                the designated size within the designated buffer of your click point.  
+            </p>
+            <h4>Step 3</h4>
+            <p>
+                To view individual travel times, click on the city marker.
+            </p>
+            <img src="styles/helpimages/TravelTime_step3.png" />
+            <h4>Step 4</h4>
+            <p>
+                To export all cities with travel times, click "Export" in the upper right corner of the map. 
+                Follow your browser prompts to download the CSV file. 
+            </p>
+            <img src="styles/helpimages/TravelTime_step4.png" />
+            <h4>Step 5</h4>
+            <p> 
+                To return to the main map, click "Exit".  The main map will display your search buffer as well as all cities meeting your city size criteria. 
+                You can clear these by clicking "Clear Travel Time" in the left panel.
+            </p>
+            <h3>Viewing Time-Enabled Population Data</h3>
+            <h4>Layer Control</h4>
+            <p>
+                The layer control in the left panel allows you to control which layers are displayed in the map.  Use the checkbox
+                to control the visibility of the layer.  To see more information about the data source and description,
+                click "Metadata".
+            </p>
+            <h4>Time Control</h4>
+            <p>
+                Both the Population Density and Cities layers contain data from 1990 through 2015.
+                To view each year's data, drag the slider in the bottom panel to the correct year.  You 
+                can also use the play button to automatically advance time, or use the forward and back
+                buttons to step forwards and backwards in time.
+            </p>
+            <img src="styles/helpimages/TimeSlider.png" />
+        </div>
+    </div>
+</body>
+
+</html>

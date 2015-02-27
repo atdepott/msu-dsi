@@ -1,0 +1,75 @@
+/* HIDDEN CHECKBOX*/
+/*
+.css-layercheckbox {
+	position: absolute;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	width: 1px;
+	margin: -1px;
+	padding: 0;
+	border: 0;
+} 
+*/
+
+.css-layercheckbox {
+/*	position: absolute;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	width: 1px;
+	padding: 0;
+	border: 0;*/
+    margin: 1px;
+}
+
+.css-layergroup {
+    display:block;
+    margin: 0px;
+    background-color: #B0B0B0;
+    color: #FFFFFF;
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+    padding: 4px;
+    padding-bottom: 0px;
+}
+
+.css-layerlabel-selected {
+    background-color: #FFFF66;
+	color: #000000;
+}
+
+.css-layerlabel-unselected {
+	color: #6D7280;
+}
+
+.css-layerlabel {
+    display:inline-block;
+    width: 80%;
+    margin: 0px;
+	font-weight: normal;
+	padding: 1px;
+    padding-left: 7px;
+    font-size: 13px;
+}
+
+.time {
+/*	background-image: url(../styles/images/time-icon.png);
+    background-repeat: no-repeat;
+    padding-left: 17px;
+    */
+}
+
+.ui-accordion-content {  
+    width: 100%;  
+    background-color: #f3f3f3;  
+    color: #777;  
+    font-size: 10pt;  
+    line-height: 16pt;  
+}  
+
+.ui-accordion-header {  
+    background-color: #ccc;  
+    margin: 0px;  
+} 

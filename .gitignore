@@ -6,6 +6,10 @@
 *.user
 *.sln.docstates
 
+# visual studio files
+*.sln
+*.pyproj
+
 # Build results
 
 [Dd]ebug/

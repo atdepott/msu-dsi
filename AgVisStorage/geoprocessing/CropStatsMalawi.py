@@ -1,16 +1,3 @@
-
-# Esri start of added imports
-import sys, os, arcpy
-# Esri end of added imports
-
-# Esri start of added variables
-g_ESRI_variable_1 = u'C:\\AgVis\\ProductionMalawi'
-g_ESRI_variable_2 = u'in_memory\rastertable'
-g_ESRI_variable_3 = u'%scratchFolder%\\statstable.dbf'
-g_ESRI_variable_4 = u'in_memory\x0ceatures'
-g_ESRI_variable_5 = u'"Extract__1" > 0'
-# Esri end of added variables
-
 import os
 import arcpy
 from arcpy import env
@@ -22,13 +9,13 @@ debug_features = os.path.join('C:\data\Temp.gdb\small')
 
 # Set this to the folder containing all rasters
 #workspace = "C:\data\AgVis"
-workspace = g_ESRI_variable_1
+workspace = "C:\AgVis\ProductionMalawi"
 
 # Temp data items - all should be deleted after script runs
 raster_table = os.path.join('rastertable.dbf')
-raster_table_view = g_ESRI_variable_2
+raster_table_view = 'in_memory\rastertable'
 out_raster = ''
-stats_table = g_ESRI_variable_3
+stats_table = 'statstable.dbf'
 
 try:
     # Check out Spatial Analyst License
@@ -40,9 +27,9 @@ try:
     if not debug:
         feature_layer = arcpy.GetParameter(0)
         crop_type = arcpy.GetParameterAsText(1)
-        crop_raster = crop_type+".tif"
+        crop_raster = crop_type+".asc"
     else:
-        feature_layer = arcpy.MakeFeatureLayer_management(debug_features,g_ESRI_variable_4)
+        feature_layer = arcpy.MakeFeatureLayer_management(debug_features,'in_memory\features')
         crop_raster = "MAIZ_H.asc"
 
     # Extract only the area under the feature layer
@@ -52,7 +39,7 @@ try:
     Sample(out_raster,out_raster,raster_table)
     
     # Select only rows with a value greater than 0
-    arcpy.MakeTableView_management(raster_table,raster_table_view,g_ESRI_variable_5)
+    arcpy.MakeTableView_management(raster_table,raster_table_view,'"Extract__1" > 0')
     
     # Get count
     result = arcpy.GetCount_management(raster_table_view)
@@ -101,6 +88,5 @@ finally:
     arcpy.Delete_management('in_memory')
 
     
-
 
 

@@ -1,12 +1,3 @@
-
-# Esri start of added imports
-import sys, os, arcpy
-# Esri end of added imports
-
-# Esri start of added variables
-g_ESRI_variable_1 = u'VALUE'
-# Esri end of added variables
-
 import arcpy
 import os
 from arcpy import env
@@ -27,13 +18,13 @@ try:
     # Do IDW Interpolation
     out_raster_name = arcpy.CreateUniqueName("output.tif", arcpy.env.scratchFolder)
     if cell_size > 0 and power != 0:
-        arcpy.Idw_3d(features, g_ESRI_variable_1, out_raster_name, cell_size, power)
+        arcpy.Idw_3d(features, "VALUE", out_raster_name, cell_size, power)
     elif cell_size > 0:
-        arcpy.Idw_3d(features, g_ESRI_variable_1, out_raster_name, cell_size=cell_size)
+        arcpy.Idw_3d(features, "VALUE", out_raster_name, cell_size=cell_size)
     elif power != 0:
-        arcpy.Idw_3d(features, g_ESRI_variable_1, out_raster_name, power=power)
+        arcpy.Idw_3d(features, "VALUE", out_raster_name, power=power)
     else:
-        arcpy.Idw_3d(features, g_ESRI_variable_1, out_raster_name)
+        arcpy.Idw_3d(features, "VALUE", out_raster_name)
     
     # Write raster as result
     arcpy.SetParameter(3, out_raster_name)

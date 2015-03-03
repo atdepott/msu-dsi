@@ -1,12 +1,3 @@
-
-# Esri start of added imports
-import sys, os, arcpy
-# Esri end of added imports
-
-# Esri start of added variables
-g_ESRI_variable_1 = u'C:\\Raster\\Data'
-# Esri end of added variables
-
 import os
 import arcpy
 import json
@@ -35,7 +26,7 @@ def evalExpression(expr, aoi_layer):
 
 
 # Set this to the folder containing all rasters
-workspace = g_ESRI_variable_1
+workspace = 'C:\Raster\Data'
 
 out_raster_name = 'outputraster'
 

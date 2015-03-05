@@ -7,11 +7,9 @@
 }
 
 body {
-    padding-top: 50px;
-    overflow: hidden;
-    
-    background-color: #e8d9b5;
-    margin-bottom: 60px;
+	padding-top: 0px;
+	overflow: hidden;
+	margin-bottom: 0px;
 }
 
 .row > div {
@@ -38,4 +36,9 @@ body {
 
 #resultSpearman, #resultSpearman * {
     border-color: black;
+}
+
+#helpDiv {
+    position: absolute;
+    right: 10px;
 }

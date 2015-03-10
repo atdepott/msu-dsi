@@ -2,6 +2,8 @@ import random
 import string
 import json
 import numpy
+import shutil
+import os
 
 import dsidata
 
@@ -135,6 +137,19 @@ class PCAFeatureSelection(DataMiningWebService):
         retobj = {"pca_features":psa_csv}
         return json.dumps(retobj)
 
+class UploadRaster(DataMiningWebService):
+    @cherrypy.tools.accept(media='image/tiff')
+    def POST(self):
+        print ("UPLOAD RASTER")
+
+        destination = os.path.join('c:/CherryPyData')                
+        with open(destination, 'wb') as f:
+          shutil.copyfileobj(cherrypy.request.body, f)
+
+        return 'Okay'
+
+        return "success"
+
 class Root(object):
     pass
 
@@ -151,6 +166,7 @@ class MyService(win32serviceutil.ServiceFramework):
         root.normalize = Normalize()
         root.spearman = SpearmanFeatureSelection()
         root.pca = PCAFeatureSelection()
+        root.raster = UploadRaster()
 
         cherrypy.tools.CORS = cherrypy.Tool('before_finalize', CORS)
         conf = {

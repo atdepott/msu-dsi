@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript">
+
+        function showhide(divid, state) {
+            document.getElementById(divid).style.display = state
+        }
+
+    </script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+
+    <title>Title</title>
+
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/dojo/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.min.css">
+
+    <script type="text/javascript">
+        var package_path = location.pathname.substring(0, location.pathname.lastIndexOf('/')).replace("/\/[^/]+$/", "");
+        var dojoConfig = {
+            // enable us to load the api from a CDN and load local modules from the correct location
+            packages: [{
+                name: "app",
+                location: package_path + '/scripts/Modules'
+            }, {
+                name: "appConfig",
+                location: package_path + '/config'
+            }]
+        };
+    </script>
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <script src="scripts/main.js"></script>
+</head>
+
+<body class="claro">
+    <!--[if IE 7]>
+    <style>
+      html, body {
+        margin: 0;
+      }
+    </style>
+    <![endif]-->
+    <div id="content"
+         data-dojo-type="dijit/layout/BorderContainer"
+         data-dojo-props="design:'headline', gutters:true"
+         style="width: 100%; height: 100%; margin: 0;">
+
+        <div id="topPane"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'top'">
+            <div id="title" data-dojo-type="dijit/layout/ContentPane">
+                Title
+            </div>
+            <span style="float: right"><a class="helpClass" href="help.html" target="_blank">Help</a></span>
+        </div>
+
+        <div id="leftPane"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'left'">
+
+            <div data-dojo-type="dijit/layout/ContentPane"
+                 data-dojo-props="region:'center'">
+
+                <div class="title-style">Clustering Tool</div>
+
+                <div>
+                    <span class="tool-title-style">Step 1: Upload Raster File (*.tif)</span>
+                    <!--<span style="display:block; width:100%; margin:0px;">
+                        Download example <a id="downloadFile" href="MalawiPoints.csv">here</a>
+                    </span>-->
+
+                    <form id="uploadform" enctype="multipart/form-data" method="post">
+                        <!--<span style="display:block; text-align:center; width:100%;">-->
+                        <!--<input id="uploadFile" type="file" name="file" style="width:100%" accept=".tif" />-->
+                        <!--</span>-->
+                        <input id="uploadFile"  type="file" name="file" />
+                    </form>
+                </div>
+
+                <div style='position:relative'>
+                    <span class="tool-title-style">Step 2: Compute Clusters</span>
+                    <span style="display:block; text-align:center; width:100%;">
+                        <input id="knnButton" type="button" value="Calculate" />
+                    </span>
+                    <span style="position:absolute; right: 5px; bottom: 5px; display:none" id="busy">
+                        <img src="styles/images/loader.gif" />
+                    </span>
+                </div>
+
+                <div>
+                    <span class="tool-title-style">Results</span>
+                    <table id="results"></table>
+                    <span style="display:block; text-align:center; width:100%;">
+                        <input id="downloadButton" type="button" value="Download Raster Data" class="toolbutton" style="display:none;" />
+                    </span>
+                    <span style="display:block; text-align:center; width:100%;">
+                        <input id="clearButton" type="button" value="Clear" class="toolbutton" />
+                    </span>
+                </div>
+            </div>
+
+            <!--<div data-dojo-type="dijit/layout/ContentPane"
+                 data-dojo-props="region:'center'">
+                <div class="title-style">Map Transparency</div>
+                <div id="sliderDiv">
+                    <div id="slider"></div>
+                </div>
+            </div>-->
+
+            <div data-dojo-type="dijit/layout/ContentPane"
+                 data-dojo-props="region:'center'">
+                <div class="title-style">Tool Description</div>
+                <div id="legendDiv">
+                    Using the k Nearest Neighbors clustering method, find clusters in TIF raster files.
+                    <br><br>
+
+                    <!--<a href="#" onclick="showhide('testdiv', 'block'); return false">Show Sample Data Citation</a> | <a href="#" onclick="showhide('testdiv', 'none'); return false">Hide</a>
+
+                    <div id="testdiv" style="display:none">Center for International Earth Science Information Network (CIESIN), Columbia University; and Centro Internacional de Agricultura Tropical (CIAT). 2005. Gridded Population of the World Version 3 (GPWv3): Centroids. Palisades, NY: Socioeconomic Data and Applications Center (SEDAC), Columbia University. Available at <a target="_blank" href="http://sedac.ciesin.columbia.edu/gpw">http://sedac.ciesin.columbia.edu/gpw</a>. (March 2014) </div>
+                    <br><br>-->
+
+                </div>
+            </div>
+        </div>
+
+        <div id="map"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'center'"
+             style="overflow:hidden;">
+            <div id="BasemapToggle"></div>
+        </div>
+
+        <!--JQuery Dialogs, Etc.-->
+        <div id="infowindow"></div>
+
+        <div id="knnDialog" title="Cluster Information">
+            <p>
+                Enter the number of clusters you wish to find.  The k Nearest Neighbors clustering method may return fewer clusters than were entered.
+                This application supports at most ten clusters.
+            </p>
+            <table>
+                <tr>
+                    <td><label for="knnNumberClusters">Number of clusters:</label></td>
+                    <td><input id="knnNumberClusters" type="text" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

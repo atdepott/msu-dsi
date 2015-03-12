@@ -13,7 +13,7 @@ try:
     cellsize = arcpy.GetRasterProperties_management(raster_loc, 'CELLSIZEX')
 
     # convert raster to points
-    arcpy.AddMessage('Converting to points: ' + raster_loc)
+    arcpy.AddMessage('Converting to points: ' + str(raster_loc))
     in_point_mem = 'in_memory\\raster_points'
     #in_point_mem = 'C:\\data\\temp.gdb\\raster_points'
     arcpy.RasterToPoint_conversion(raster_loc, in_point_mem, "VALUE")

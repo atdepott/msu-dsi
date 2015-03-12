@@ -1,7 +1,9 @@
+var clusterTool;
+
 require([
     "esri/map",
     "esri/layers/ArcGISDynamicMapServiceLayer",
-    //"esri/dijit/Legend",
+    "esri/dijit/Legend",
     "esri/dijit/Scalebar",
     "esri/dijit/BasemapToggle",
     //"esri/dijit/Popup",
@@ -17,14 +19,14 @@ require([
 ], function (
     Map,
     ArcGISDynamicMapServiceLayer,
-    //Legend,
+    Legend,
     Scalebar,
     BasemapToggle,
     //Popup,
     //Draw, Graphic, graphicsUtils,
     //SimpleFillSymbol,
-    parser,on,
-    config, 
+    parser, on,
+    config,
     ClusterTool
 ) {
     // call this here to ensure that map fills entire content pane
@@ -42,14 +44,14 @@ require([
     //infoWindow.resize(100, 100);
 
     var map = new Map("map", {
-        basemap: "gray",
+        basemap: "satellite",
         center: [36.8167, -1.2833],
         zoom: 8
     });
 
     var toggle = new BasemapToggle({
         map: map,
-        basemap: "satellite"
+        basemap: "topo"
     }, "BasemapToggle");
     toggle.startup();
 
@@ -57,29 +59,39 @@ require([
         map: map,
         scalebarUnit: "dual"
     });
-    
-    var clusterTool = new ClusterTool(map, config.kNN_GP_url, config.kNN_upload_url, config.kNN_MapService_url);
-    
-    $("#uploadFile").change(function () {
-        var file = this.files[0];
 
-        if (file.type.match(/image.*/)) {
-            clusterTool.uploadFile("uploadform");
+    clusterTool = new ClusterTool(map, config.kNN_GP_url, config.kNN_upload_url, config.kNN_MapService_url);
+
+    map.on("layer-add", function (evt) {
+        if (evt.layer.layerInfos[0].name != "World Imagery") {
+            if (typeof legend == 'undefined') {
+                // Add the legend
+                legend = new Legend({
+                    map: map,
+                    layerInfos: [{ layer: evt.layer }]
+                }, "legendDiv");
+                legend.startup();
+            } else {
+                legend.refresh();
+            }
         }
-
     });
-    
+
+    $("#knnButton").button().click(function () {
+        $("#knnDialog").dialog("open")
+    });
+
     $("#clearButton").button().click(function () {
-        map.graphics.clear();
-        //$("#downloadButton").hide();
-        points = undefined;
+        $("#downloadButton").hide();
         $("#legendDiv").empty();
+
+        clusterTool.clear();
 
         // replace file uploader
         var control = $("#uploadFile");
         control.replaceWith(control.val('').clone(true));
     });
-    
+
     $("#knnDialog").dialog({
         autoOpen: false,
         width: 400,
@@ -88,8 +100,17 @@ require([
         buttons: {
             "Compute Clusters": function () {
                 $('#busy').show()
+
                 var numClusters = $("#knnNumberClusters").val();
-                clusterTool.knnCluster(points, onClusterComplete, numClusters );
+                if (!isNaN(numClusters)) {
+                    clusterTool.uploadFile('uploadform', function (itemid) {
+                        if (typeof itemid == 'undefined') {
+                            alert("Unable to upload file.  Please choose another file and try again.");
+                        } else {
+                            clusterTool.doCluster(itemid, numClusters, onClusterComplete);
+                        }
+                    });
+                }
 
                 $(this).dialog("close");
             },
@@ -99,27 +120,25 @@ require([
         }
     });
 
-   
+
 
     function onClusterComplete(url) {
-       /* $("#downloadButton").button().click(function () {
+        $("#downloadButton").button().click(function () {
             window.open(url);
         });
         $("#downloadButton").show();
 
         //fix transparency to match slider
-        interpolationTool.updateTransparency($("#slider").slider("option", "value"));
-       */
-       $('#busy').hide()
+        clusterTool.updateTransparency($("#slider").slider("option", "value"));
+
+        $('#busy').hide()
     }
 
-    //$("#slider").slider({
-    //    min: 0, max: 1, step: 0.01, value:0.8,
-    //    change: function (event, ui) {
-    //        interpolationTool.updateTransparency(ui.value);
-    //    }
-    //});
-    
+    $("#slider").slider({
+        min: 0, max: 1, step: 0.01, value:0.8,
+        change: function (event, ui) {
+            clusterTool.updateTransparency(ui.value);
+        }
+    });
+
 });
-
-

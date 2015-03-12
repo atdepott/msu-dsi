@@ -35,6 +35,12 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
     <script src="scripts/main.js"></script>
+    <script>
+        function uploadFile() {
+            console.log("file changed!");
+            
+        }
+    </script>
 </head>
 
 <body class="claro">
@@ -75,10 +81,10 @@
                     </span>-->
 
                     <form id="uploadform" enctype="multipart/form-data" method="post">
-                        <!--<span style="display:block; text-align:center; width:100%;">-->
-                        <!--<input id="uploadFile" type="file" name="file" style="width:100%" accept=".tif" />-->
-                        <!--</span>-->
-                        <input id="uploadFile"  type="file" name="file" />
+                        <span style="display:block; text-align:center; width:100%;">
+                            <input id="uploadFile" type="file" name="file" style="width:100%" accept=".tif" />
+                        </span>
+                        <!--<input id="uploadFile"  type="file" name="file"/>-->
                     </form>
                 </div>
 
@@ -104,26 +110,25 @@
                 </div>
             </div>
 
-            <!--<div data-dojo-type="dijit/layout/ContentPane"
+            <div data-dojo-type="dijit/layout/ContentPane"
                  data-dojo-props="region:'center'">
-                <div class="title-style">Map Transparency</div>
+                <div class="title-style">Legend</div>
+                <div id="legendDiv"></div>
+            </div>
+
+            <div data-dojo-type="dijit/layout/ContentPane"
+                 data-dojo-props="region:'center'">
+                <div class="title-style">Result Transparency</div>
                 <div id="sliderDiv">
                     <div id="slider"></div>
                 </div>
-            </div>-->
+            </div>
 
             <div data-dojo-type="dijit/layout/ContentPane"
                  data-dojo-props="region:'center'">
                 <div class="title-style">Tool Description</div>
                 <div id="legendDiv">
                     Using the k Nearest Neighbors clustering method, find clusters in TIF raster files.
-                    <br><br>
-
-                    <!--<a href="#" onclick="showhide('testdiv', 'block'); return false">Show Sample Data Citation</a> | <a href="#" onclick="showhide('testdiv', 'none'); return false">Hide</a>
-
-                    <div id="testdiv" style="display:none">Center for International Earth Science Information Network (CIESIN), Columbia University; and Centro Internacional de Agricultura Tropical (CIAT). 2005. Gridded Population of the World Version 3 (GPWv3): Centroids. Palisades, NY: Socioeconomic Data and Applications Center (SEDAC), Columbia University. Available at <a target="_blank" href="http://sedac.ciesin.columbia.edu/gpw">http://sedac.ciesin.columbia.edu/gpw</a>. (March 2014) </div>
-                    <br><br>-->
-
                 </div>
             </div>
         </div>
@@ -149,6 +154,9 @@
                     <td><input id="knnNumberClusters" type="text" /></td>
                 </tr>
             </table>
+            <p>
+                This tool make take several minutes to run.
+            </p>
         </div>
     </div>
 </body>

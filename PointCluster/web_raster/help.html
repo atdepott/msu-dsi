@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Help</title>
+    <link rel="stylesheet" href="styles/main.css">
+    
+</head>
+
+<body>
+    <div id="content"
+         data-dojo-type="dijit/layout/BorderContainer"
+         data-dojo-props="design:'headline', gutters:true"
+         style="width: 100%; height: 100%; margin: 0;">
+        <div id="topPane"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'top'">
+            <div id="title" data-dojo-type="dijit/layout/ContentPane">
+                k Nearest Neighbor Help
+            </div>
+        </div>
+        <div id="helpcontent"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'center'">
+            <p>
+                This application performs k Nearest Neighbor clustering to find clusters in raster TIFF files.
+                For more information on k Nearest Neighbor clustering, 
+                please click <a href="http://resources.arcgis.com/en/help/main/10.2/index.html#//005p0000004w000000" target="_blank">here</a>.
+            </p>
+            <h3>Clustering Tool</h3>
+            <h4>Step 1</h4>
+            <p>
+                Click the "Choose File" button and navigate to a TIFF raster file (with an extension .tif).
+            </p>
+            <img src="styles/helpimages/cl_step1.png" />
+            <h4>Step 2</h4>
+            <p>
+                Click "Calculate" and a popup will appear.  Enter the number of clusters you wish to calculate (between 2 and 10).
+                The application may return fewer clusters than requested if the data does not support the requested number of clusters.
+                Click "Compute Clusters".
+            </p>
+            <img src="styles/helpimages/cl_step2.png" />
+            <h4>Results</h4>
+            <p>
+                After a short time, the map should display your clustered layer.  Each color represents a different cluster.  
+                You may download a TIFF file with your results by clicking "Download Raster Data" 
+                or clear the map to begin with a new dataset by clicking the "Clear" button.
+            </p>
+            <img src="styles/helpimages/cl_results.png" />
+            
+            <h3>Legend</h3>
+            <p>
+                The legend will automatically populate after you calculate clusters in your data.
+            </p>
+            <img src="styles/helpimages/cl_legend.png" />
+            <h3>Basemap picker</h3>
+            <p>
+                Click the basemap button to toggle between the topographic basemap and a satellite imagery basemap.
+            </p>
+            <img src="styles/helpimages/basemap.png"/>
+        </div>
+    </div>
+</body>
+
+</html>

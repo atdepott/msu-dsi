@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Help</title>
+    <link rel="stylesheet" href="styles/main.css">
+    
+</head>
+
+<body>
+    <div id="content"
+         data-dojo-type="dijit/layout/BorderContainer"
+         data-dojo-props="design:'headline', gutters:true"
+         style="width: 100%; height: 100%; margin: 0;">
+        <div id="topPane"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'top'">
+            <div id="title" data-dojo-type="dijit/layout/ContentPane">
+                Spatial Outlier Analysis Help
+            </div>
+        </div>
+        <div id="helpcontent"
+             data-dojo-type="dijit/layout/ContentPane"
+             data-dojo-props="region:'center'">
+            <p>
+                This application find spatial outliers in geospatial data.
+                For more information on the outlier analysis method, 
+                please click <a href="http://resources.arcgis.com/en/help/main/10.2/index.html#/How_Cluster_and_Outlier_Analysis_Anselin_Local_Moran_s_I_works/005p00000012000000/" target="_blank">here</a>.
+            </p>
+            <h3>Spatial Outlier Tool</h3>
+            <h4>Step 1</h4>
+            <p>
+                Click the "Choose File" button and navigate to a csv file that contains at the minimum a latitude or Y 
+                column, a longitude or X column, and a value column.
+            </p>
+            <img src="styles/helpimages/cl_step1.png" />
+            <p>
+                A popup will appear.  Choose the column for the latitude, longitude, and value that you wish to map 
+                and click "Ok".
+            </p>
+            <img src="styles/helpimages/cl_step1B.png" />
+            <p>
+                Your points should be mapped.  To view the value for each point, click on it.
+            </p>
+            <img src="styles/helpimages/cl_step1C.png" />
+            <h4>Step 2</h4>
+            <p>
+                Click "Calculate".
+            </p>
+            <h4>Results</h4>
+            <p>
+                After a short time, the map should display your layer with different symbols. Default points are shown in white and outlier points in red.  
+                You can clear the map to begin with a new dataset by clicking the "Clear" button.
+            </p>
+            <img src="styles/helpimages/cl_results.png" />
+            <h3>Basemap picker</h3>
+            <p>
+                Click the basemap button to toggle between the topographic basemap and a satellite imagery basemap.
+            </p>
+            <img src="styles/helpimages/basemap.png"/>
+        </div>
+    </div>
+</body>
+
+</html>

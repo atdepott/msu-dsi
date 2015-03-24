@@ -25,16 +25,15 @@ try:
     arcpy.AddMessage('Outlier analysis complete')
 
     # add field to use for classification
-    zfieldname = result[2]
     arcpy.AddField_management(out_features, 'ISOUTLIER', 'SHORT')    
     codeblock = '''
-def getClass(zindex):
-    if zindex < -1:
+def getClass(cotype):
+    if cotype == 'HL' or cotype == 'LH':
         return 1
     else:
         return 0
     '''
-    arcpy.CalculateField_management(out_features, 'ISOUTLIER', "getClass(!"+zfieldname+"!)",'PYTHON_9.3', codeblock)
+    arcpy.CalculateField_management(out_features, 'ISOUTLIER', "getClass(!COType!)",'PYTHON_9.3', codeblock)
     arcpy.AddMessage('Classification field added')
 
     # convert clustered points to a raster

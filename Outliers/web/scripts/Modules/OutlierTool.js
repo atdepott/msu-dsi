@@ -66,7 +66,8 @@ define([
                         function (result) {
                             
                             $.each(result.value.features, function (index, value) {
-                                if (value.attributes["LMiZScore"] < -1) {
+                                var cluster = value.attributes["COType"];
+                                if (cluster == "HL" || cluster == "LH") {
                                     value.setSymbol(outlierSymbol);
                                 } else {
                                     value.setSymbol(defaultSymbol);

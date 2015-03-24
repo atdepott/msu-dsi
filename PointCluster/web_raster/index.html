@@ -35,12 +35,6 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
     <script src="scripts/main.js"></script>
-    <script>
-        function uploadFile() {
-            console.log("file changed!");
-            
-        }
-    </script>
 </head>
 
 <body class="claro">
@@ -76,9 +70,9 @@
 
                 <div>
                     <span class="tool-title-style">Step 1: Upload Raster File (*.tif)</span>
-                    <!--<span style="display:block; width:100%; margin:0px;">
-                        Download example <a id="downloadFile" href="MalawiPoints.csv">here</a>
-                    </span>-->
+                    <span style="display:block; width:100%; margin:0px;">
+                        Download example <a id="downloadFile" href="CASS_R.tif">here</a>
+                    </span>
 
                     <form id="uploadform" enctype="multipart/form-data" method="post">
                         <span style="display:block; text-align:center; width:100%;">
@@ -127,8 +121,14 @@
             <div data-dojo-type="dijit/layout/ContentPane"
                  data-dojo-props="region:'center'">
                 <div class="title-style">Tool Description</div>
-                <div id="legendDiv">
+                <div>
                     Using the k Nearest Neighbors clustering method, find clusters in TIF raster files.
+                </div>
+
+                <a href="#" onclick="showhide('testdiv', 'block'); return false">Show Sample Data Citation</a> | <a href="#" onclick="showhide('testdiv', 'none'); return false">Hide</a>
+
+                <div id="testdiv" style="display:none">
+                    HarvestChoice, 2011. "Agricultural production, yield and harvested area (2000)." International Food Policy Research Institute, Washington, DC., and University of Minnesota, St. Paul, MN. Available online at <a href="http://harvestchoice.org/maps">http://harvestchoice.org/maps</a>
                 </div>
             </div>
         </div>

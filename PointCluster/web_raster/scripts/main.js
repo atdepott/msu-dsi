@@ -6,7 +6,7 @@ require([
     "esri/dijit/Legend",
     "esri/dijit/Scalebar",
     "esri/dijit/BasemapToggle",
-    //"esri/dijit/Popup",
+    "esri/dijit/Popup",
     //"esri/toolbars/draw",
     //"esri/graphic",
     //"esri/graphicsUtils",
@@ -22,7 +22,7 @@ require([
     Legend,
     Scalebar,
     BasemapToggle,
-    //Popup,
+    Popup,
     //Draw, Graphic, graphicsUtils,
     //SimpleFillSymbol,
     parser, on,
@@ -40,13 +40,15 @@ require([
     $("#title").empty();
     $("#title").append(config.title);
 
-    //var infoWindow = new Popup({}, "infowindow");
-    //infoWindow.resize(100, 100);
+    var infoWindow = new Popup({}, "infowindow");
+    infoWindow.resize(100, 100);
+    infoWindow.setTitle("VALUE");
 
     var map = new Map("map", {
         basemap: "satellite",
         center: [36.8167, -1.2833],
-        zoom: 8
+        zoom: 8,
+        infoWindow: infoWindow
     });
 
     var toggle = new BasemapToggle({

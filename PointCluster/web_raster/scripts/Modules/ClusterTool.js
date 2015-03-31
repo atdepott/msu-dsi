@@ -5,6 +5,8 @@ define([
       "esri/graphic",
       "esri/tasks/Geoprocessor",
       "esri/tasks/FeatureSet",
+      "esri/tasks/IdentifyTask",
+      "esri/tasks/IdentifyParameters",
       "dojo/on",
       "dojo/promise/all",
       "dojo/dom",
@@ -17,6 +19,8 @@ define([
       Graphic,
       Geoprocessor,
       FeatureSet,
+      IdentifyTask,
+      IdentifyParameters,
       on, all,
       dom,
       SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color
@@ -79,6 +83,11 @@ define([
                         self.map.setExtent(extent);
                     });
 
+                    // setup click
+                    self.clickhandler = self.map.on("click", function (event) {
+                        findRasterValue(event, self.resultLayer.url, self.map);
+                    });
+
                     // get image
                     gp.getResultData(jobInfo.jobId, 'OutputRaster',
                         function (result) {
@@ -106,5 +115,26 @@ define([
             }
         }
     });
+
+    function findRasterValue(event, url, map) {
+        var identifyTask = new IdentifyTask(url);
+
+        var identifyParams = new IdentifyParameters();
+        identifyParams.layerIds = [0];
+        identifyParams.tolerance = 3;
+        identifyParams.geometry = event.mapPoint;
+        identifyParams.mapExtent = map.extent;
+
+        identifyTask.execute(identifyParams, function (result) {
+            if (result.length > 0) {
+                var content = result[0].feature.attributes["Pixel Value"];
+                console.log(content);
+                map.infoWindow.setContent(content);
+                map.infoWindow.show(event.mapPoint);
+            } else {
+                map.infoWindow.hide();
+            }
+        });
+    }
 });
 

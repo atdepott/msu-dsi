@@ -18,7 +18,7 @@
              data-dojo-type="dijit/layout/ContentPane"
              data-dojo-props="region:'top'">
             <div id="title" data-dojo-type="dijit/layout/ContentPane">
-                Spatial Outlier Analysis - Raster Help
+                Spatial Outlier Analysis Help
             </div>
         </div>
         <div id="helpcontent"
@@ -26,30 +26,35 @@
              data-dojo-props="region:'center'">
             <p>
                 This application find spatial outliers in geospatial data.
-                For more information on the outlier analysis method,
+                For more information on the outlier analysis method, 
                 please click <a href="http://resources.arcgis.com/en/help/main/10.2/index.html#/How_Cluster_and_Outlier_Analysis_Anselin_Local_Moran_s_I_works/005p00000012000000/" target="_blank">here</a>.
             </p>
             <h3>Spatial Outlier Tool</h3>
             <h4>Step 1</h4>
             <p>
-                Click the "Choose File" button and navigate to a TIFF raster file (with an extension .tif).  Click "Calculate".
+                Click the "Choose File" button and navigate to a csv file that contains at the minimum a latitude or Y 
+                column, a longitude or X column, and a value column.
             </p>
-            <img src="styles/helpimages/step1.png" />
-            
+            <img src="styles/helpimages/cl_step1.png" />
+            <p>
+                A popup will appear.  Choose the column for the latitude, longitude, and value that you wish to map 
+                and click "Ok".
+            </p>
+            <img src="styles/helpimages/cl_step1B.png" />
+            <p>
+                Your points should be mapped.  To view the value for each point, click on it.
+            </p>
+            <img src="styles/helpimages/cl_step1C.png" />
+            <h4>Step 2</h4>
+            <p>
+                Click "Calculate".
+            </p>
             <h4>Results</h4>
             <p>
-                After a short time, the map should display your layer. Default pixels are shown in grey and 
-                outlier points in red (represented by 0 and 1, respectively, in the raster).
+                After a short time, the map should display your layer with different symbols. Default points are shown in white and outlier points in red.  
                 You can clear the map to begin with a new dataset by clicking the "Clear" button.
-                You may download a TIFF file with your results by clicking "Download Raster Data" 
-                or clear the map to begin with a new dataset by clicking the "Clear" button.
             </p>
-            <img src="styles/helpimages/results.png" />
-            
-            <h3>Legend</h3>
-            <p>
-                The legend will automatically populate after you calculate outliers in your data.
-            </p>
+            <img src="styles/helpimages/cl_results.png" />
             <h3>Basemap picker</h3>
             <p>
                 Click the basemap button to toggle between the topographic basemap and a satellite imagery basemap.

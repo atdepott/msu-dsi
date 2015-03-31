@@ -39,21 +39,21 @@ define([
             var itemid = "";
             var uploadurl = this.uploadurl;
             uploadRequest = esriRequest({
-                    url: uploadurl,
-                    form: dojo.byId(fileUploadId),
-                    content: { "f": "pjson" },
-                    load: function (response, io) {
-                        var itemId = response["item"].itemID
-                        callback(itemId);
-                    },
-                    error: function (error) {
-                        console.log("error");
-                        callback();
-                    }
+                url: uploadurl,
+                form: dojo.byId(fileUploadId),
+                content: { "f": "pjson" },
+                load: function (response, io) {
+                    var itemId = response["item"].itemID
+                    callback(itemId);
+                },
+                error: function (error) {
+                    console.log("error");
+                    callback();
+                }
             }, { usePost: true });
         },
 
-        doOutlierAnalysis: function (itemid, callback) {
+        doHotSpotAnalysis: function (itemid, callback) {
             var self = this;
 
             // Create params object to pass to geoprocessing service
@@ -61,7 +61,7 @@ define([
             var params = {
                 InputRaster: "{'itemID':" + itemid + "}"
             };
-            
+
             // Submit job
             var gp = new Geoprocessor(self.gpurl);
             gp.submitJob(params, function (jobInfo) {
@@ -86,6 +86,8 @@ define([
                         findRasterValue(event, self.resultLayer.url, self.map);
                     });
 
+                    drawLegend();
+
                     // get image
                     gp.getResultData(jobInfo.jobId, 'OutputRaster',
                         function (result) {
@@ -106,12 +108,16 @@ define([
             if (typeof this.resultLayer != 'undefined') {
                 this.map.removeLayer(this.resultLayer);
             }
+            if (typeof this.clickhandler != undefined) {
+                this.clickhandler.remove();
+            }
         },
         updateTransparency: function (opacityVal) {
             if (typeof this.resultLayer != 'undefined') {
                 this.resultLayer.setOpacity(opacityVal);
             }
-        }
+        },
+
     });
 
     function findRasterValue(event, url, map) {
@@ -132,6 +138,42 @@ define([
             } else {
                 map.infoWindow.hide();
             }
+        });
+    }
+
+    function drawLegend() {
+        // these *should* correspond to the colors in that the service returns
+        var colors = {
+            'hot1': { label: 'Hot (p <= 0.01)', color: new Color([178, 24, 43]) }, //lowest p-value hot spot
+            'hot2': { label: 'Hot (p <= 0.05)', color: new Color([239, 138, 98]) },
+            'hot3': { label: 'Hot (p <= 0.1)', color: new Color([253, 219, 199]) }, // highest p-value hot spot
+            'default': { label: 'Default', color: new Color([247, 247, 247]) }, // not statistically significant
+            'cold1': { label: 'Cold (p <= 0.01)', color: new Color([209, 229, 240]) }, // lowest p-value cold spot
+            'cold2': { label: 'Cold (p <= 0.05)', color: new Color([103, 169, 207]) },
+            'cold3': { label: 'Cold (p <= 0.1)', color: new Color([33, 102, 172]) }  // highest p-value cold spot
+        }
+
+        // draw legend
+        var legendTable = $("#legendDiv table");
+        legendTable.empty();
+        $.each(colors, function (classy, obj) {
+            var row = $("<tr/>").appendTo(legendTable);
+
+            // draw circle
+            var colorCell = $("<td />").appendTo(row);
+
+            var canvas = $("<canvas/>").attr("width", 20).attr("height", 20).appendTo(colorCell);
+            var ctx = canvas[0].getContext("2d");
+            ctx.fillStyle = obj.color.toHex();
+            ctx.beginPath();
+            ctx.arc(10, 10, 10, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = 'black';
+            ctx.stroke();
+
+            // create label
+            var labelCell = $("<td />").text(obj.label).appendTo(row);
         });
     }
 });

@@ -62,7 +62,7 @@ define([
 	                gp.getResultData(jobInfo.jobId, 'OutRaster',
                         function (result) {
                             if (typeof callback != 'undefined') {
-                                callback(result.value.url);
+                                callback(result.value.url, self.resultLayer);
                             }
 	                    });
 	            }
@@ -113,7 +113,7 @@ define([
 	                gp.getResultData(jobInfo.jobId, 'OutRaster',
                         function (result) {
                             if (typeof callback != 'undefined') {
-                                callback(result.value.url);
+                                callback(result.value.url, self.resultLayer);
                             }
                         });
 	            }
@@ -164,7 +164,7 @@ define([
                     gp.getResultData(jobInfo.jobId, 'OutRaster',
                         function (result) {
                             if (typeof callback != 'undefined') {
-                                callback(result.value.url);
+                                callback(result.value.url, self.resultLayer);
                             }
                         });
                 }

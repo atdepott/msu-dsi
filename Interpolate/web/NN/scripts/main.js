@@ -12,6 +12,7 @@ require([
     "dojo/parser", "dojo/on",
     "appConfig/defaults",
     "app/InterpolationTool", "app/CSVTool",
+    "app/RasterIdentify",
     "dijit/layout/BorderContainer", "dijit/layout/ContentPane",
     "dijit/layout/AccordionContainer", "dojo/domReady!"
 ], function (
@@ -24,7 +25,8 @@ require([
     SimpleFillSymbol,
     parser,on,
     config, 
-    InterpolationTool, CSVTool
+    InterpolationTool, CSVTool,
+    RasterIdentify
 ) {
     // call this here to ensure that map fills entire content pane
     parser.parse();
@@ -39,6 +41,7 @@ require([
 
     var infoWindow = new Popup({}, "infowindow");
     infoWindow.resize(100, 100);
+    infoWindow.setTitle("VALUE");
 
     var map = new Map("map", {
         basemap: "topo",
@@ -68,6 +71,7 @@ require([
                 splineMapUrl: config.splineInterpolationToolMapUrl
             });
     var csvTool = new CSVTool();
+    var rasterIdentify = new RasterIdentify(map);
 
     var csvstring;
     var points;
@@ -205,6 +209,8 @@ require([
         // replace file uploader
         var control = $("#uploadFile");
         control.replaceWith(control.val('').clone(true));
+
+        rasterIdentify.stop();
     });
 
     $("#clearPointsButton").button().click(function () {
@@ -310,7 +316,7 @@ require([
         }
     });
 
-    function onSurfaceComplete(url) {
+    function onSurfaceComplete(url, layer) {
         $("#busy").hide();
 
         $("#downloadButton").button().click(function () {
@@ -320,6 +326,8 @@ require([
 
         //fix transparency to match slider
         interpolationTool.updateTransparency($("#slider").slider("option", "value"));
+
+        rasterIdentify.start(layer.url, [0]);
     }
 
     $("#slider").slider({
@@ -329,7 +337,7 @@ require([
         }
     });
 
-    console.log(config.interpolationHtml);
+    //console.log(config.interpolationHtml);
     $("#interpolationDescripDiv").html(config.interpolationHtml);
 
     //deal with form inputs

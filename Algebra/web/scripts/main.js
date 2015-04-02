@@ -2,6 +2,7 @@ require([
     "esri/map",
     "esri/layers/ArcGISDynamicMapServiceLayer",
     "esri/dijit/Legend",
+    "esri/dijit/Popup",
     "esri/dijit/Scalebar",
     "esri/dijit/BasemapToggle",
     "esri/toolbars/draw",
@@ -12,12 +13,14 @@ require([
     "app/GeometryOperations", "app/AdvancedRasterMath",
     "app/ExpressionBuilder",
     "app/MetadataHelper",
+    "app/RasterIdentify",
     "dijit/layout/BorderContainer", "dijit/layout/ContentPane",
     "dijit/layout/AccordionContainer", "dojo/domReady!"
 ], function (
     Map,
     ArcGISDynamicMapServiceLayer,
     Legend,
+    Popup,
     Scalebar,
     BasemapToggle,
     Draw, Graphic,
@@ -26,7 +29,8 @@ require([
     config, 
     GeometryOperations, AdvancedRasterMath,
     ExpressionBuilder,
-    MetadataHelper
+    MetadataHelper,
+    RasterIdentify
 ) {
     // call this here to ensure that map fills entire content pane
     parser.parse();
@@ -80,10 +84,15 @@ require([
         });
     });
     
+    var popup = new Popup({}, "popup");
+    popup.resize(100, 100);
+    popup.setTitle("VALUE");
+
     var map = new Map("map", {
         basemap: "topo",
         center: [36.8167, -1.2833],
-        zoom: 8
+        zoom: 8,
+        infoWindow: popup
     });
 
     var toggle = new BasemapToggle({
@@ -99,6 +108,7 @@ require([
     
     var geometryOps = new GeometryOperations(map, config.geometryServiceURL);
     var mathTool = new AdvancedRasterMath(map, config.mathToolUrl, config.mathToolMapUrl);
+    var rasterIdentify = new RasterIdentify(map);
 
     var currentExpr;
     var currentResultLayer;
@@ -141,6 +151,8 @@ require([
         $("#downloadButton").show();
 
         currentResultLayer = resultObj.layer;
+
+        rasterIdentify.start(currentResultLayer.url, [0]);
 
         refreshLegend();
     }
@@ -193,18 +205,23 @@ require([
         var raster = $('#layerInput').val();
         var layer = map.getLayer("rasters");
         if (raster != -1) {
+            var id = config.rasterSources[raster].index;
             $("#layerInput").attr("title", [config.rasterSources[raster].title]);
-            layer.setVisibleLayers([config.rasterSources[raster].index]);
+            layer.setVisibleLayers([id]);
             layer.show();
+
+            rasterIdentify.start(layer.url, [id]);
         } else {
             $("#layerInput").attr("title", "Choose layer to display");
             layer.setVisibleLayers([-1]);
+            rasterIdentify.stop();
         }
         refreshLegend();
     });
     
     $("#polygonButton").button().click(function () {
-        if (typeof currentExpr != 'undefined'){
+        if (typeof currentExpr != 'undefined') {
+            rasterIdentify.stop();
             toolbar.activate(Draw.POLYGON);
         } else {
             alert("Please choose an expression before defining an area.");
@@ -231,6 +248,8 @@ require([
                 var distanceVal = parseFloat($("#bufferDistanceInput").val());
 
                 if (distanceVal > 0) {
+                    rasterIdentify.stop();
+
                     map.setMapCursor("crosshair");
                     mapClick = map.on("click", function (evt) {
                         map.setMapCursor("default");
@@ -276,6 +295,8 @@ require([
         }
         refreshLegend();
         $("#raster-checkboxes").find('input[type=checkbox]:checked').removeAttr('checked');
+
+        rasterIdentify.stop();
     });
 
     $("#exprBuildButton").button().click(function () {

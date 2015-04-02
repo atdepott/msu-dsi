@@ -1,6 +1,7 @@
 require([
     "esri/map",
     "esri/layers/ArcGISDynamicMapServiceLayer",
+    "esri/dijit/Popup",
     "esri/dijit/Legend",
     "esri/dijit/Scalebar",
     "esri/dijit/BasemapToggle",
@@ -10,11 +11,13 @@ require([
     "dojo/parser", "dojo/on",
     "appConfig/defaults",
     "app/GeometryOperations", "app/ProductionTools",
+    "app/RasterIdentify",
     "dijit/layout/BorderContainer", "dijit/layout/ContentPane",
     "dijit/layout/AccordionContainer", "dojo/domReady!"
 ], function (
     Map,
     ArcGISDynamicMapServiceLayer,
+    Popup,
     Legend,
     Scalebar,
     BasemapToggle,
@@ -22,7 +25,8 @@ require([
     SimpleFillSymbol,
     parser,on,
     config, 
-    GeometryOperations, ProductionTools
+    GeometryOperations, ProductionTools,
+    RasterIdentify
 ) {
     // call this here to ensure that map fills entire content pane
     parser.parse();
@@ -37,10 +41,15 @@ require([
         $("#cropLayerInput").append("<option value='"+key+"'>"+obj.title+"</option>");
     });
 
+    var popup = new Popup({}, "popup");
+    popup.resize(100, 100);
+    popup.setTitle("VALUE");
+
     var map = new Map("map", {
         basemap: "topo",
         center: [36.8167, -1.2833],
-        zoom: 8
+        zoom: 8,
+        infoWindow: popup
     });
 
     var toggle = new BasemapToggle({
@@ -56,6 +65,7 @@ require([
     
     var geometryOps = new GeometryOperations(map, config.geometryServiceURL);
     var productionTools = new ProductionTools(map, config.cropStatsUrl);
+    var rasterIdentify = new RasterIdentify(map);
 
     var layer = new ArcGISDynamicMapServiceLayer(config.cropsUrl, {
         mode: ArcGISDynamicMapServiceLayer.MODE_ONDEMAND,
@@ -110,18 +120,22 @@ require([
         var crop = $('#cropLayerInput').val();
         var layer = map.getLayer("crops");
         if (crop != -1) {
-            layer.setVisibleLayers([cropLayers[crop].index]);
+            var idx = cropLayers[crop].index;
+            layer.setVisibleLayers([idx]);
             layer.show();
             currentstep = "STEP1";
+            rasterIdentify.start(layer.url, [idx]);
         } else {
             layer.setVisibleLayers([-1]);
             currentstep = "INIT";
+            rasterIdentify.stop();
         }
         legend.refresh();
     });
 
     $("#polygonButton").button().click(function () {
         if (currentstep == "STEP1") {
+            rasterIdentify.stop();
             toolbar.activate(Draw.POLYGON);
         } else if (currentstep == "INIT") {
             alert("Please select a crop.");
@@ -151,6 +165,7 @@ require([
                 var distanceVal = parseFloat($("#bufferDistanceInput").val());
 
                 if (distanceVal > 0) {
+                    rasterIdentify.stop();
                     map.setMapCursor("crosshair");
                     mapClick = map.on("click", function (evt) {
                         map.setMapCursor("default");
@@ -210,6 +225,7 @@ require([
             mapClick.remove();
         }
         currentstep = "INIT";
+        rasterIdentify.stop();
     });
 });
 

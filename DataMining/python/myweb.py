@@ -130,7 +130,8 @@ class PCAFeatureSelection(DataMiningWebService):
         # add headers
         #psa_csv = "\n".join([",".join(headers), handler.ConvertNPArrayToCSVString(pca_rslt)])
         psa_rslt = numpy.row_stack([headers, pca_rslt])
-        psa_rslt = numpy.column_stack([psa_rslt, textcols])
+        # comment this out for now so we are only returned PCA features
+        #psa_rslt = numpy.column_stack([psa_rslt, textcols])
 
         psa_csv = handler.ConvertNPArrayToCSVString(psa_rslt)
 

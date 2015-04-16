@@ -16,6 +16,7 @@ require([
     "dojo/_base/array", "dojo/parser",
     "appConfig/defaults",
     "app/GeometryOperations", "app/TravelTimeTool", "app/MetadataHelper",
+    "app/RasterIdentify",
     "dojo/dom-construct", "dojo/query", "dojo/on",
     "dijit/layout/BorderContainer", "dijit/layout/ContentPane",
     "dijit/layout/AccordionContainer", "dojo/domReady!"
@@ -33,6 +34,7 @@ require([
     arrayUtils, parser,
     config, 
     GeometryOperations, TravelTimeTool, MetadataTool,
+    RasterIdentify,
     domConstruct, query, on
 ) {
     //call this here to ensure that map fills entire content pane
@@ -45,6 +47,7 @@ require([
     var popup = Popup({
         titleInBody: false
     }, domConstruct.create("div"));
+    popup.setTitle("VALUE");
 
     map = new Map("map", {
         basemap: "topo",
@@ -58,6 +61,7 @@ require([
         scalebarUnit: "dual"
     });
 
+    //var rasterIdentify = new RasterIdentify(map);
 
     geometryOps = new GeometryOperations(map);
     travelTimeTool = new TravelTimeTool(map, "map-google",
@@ -137,9 +141,13 @@ require([
         id: "globalpopulation",
         opacity: 0.8
     });
-      
+    
     map.on("layers-add-result", function (evt) {
         
+        // start the raster identify
+        // this layer id is hardcoded here:
+        //rasterIdentify.start(populationLayer.url, [3]);
+
         // Add the legends
         var legendDijit1 = new Legend({
             map: map,

@@ -1,6 +1,6 @@
 var csvstring;
 
-var baseUrl = "http://35.9.24.58:80/"
+var baseUrl = "http://dsiweb.cse.msu.edu:8080/"
 //var baseUrl = "http://localhost:8080/"
 
 $(document).ready(function () {

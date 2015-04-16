@@ -11,6 +11,7 @@ require([
     "dojo/parser", "dojo/on",
     "appConfig/defaults",
     "app/GeometryOperations", "app/ProductionTools",
+    "app/RasterIdentify",
     "dijit/layout/BorderContainer", "dijit/layout/ContentPane",
     "dijit/layout/AccordionContainer", "dojo/domReady!"
 ], function (
@@ -24,7 +25,8 @@ require([
     SimpleFillSymbol,
     parser,on,
     config, 
-    GeometryOperations, ProductionTools
+    GeometryOperations, ProductionTools,
+    RasterIdentify
 ) {
     // call this here to ensure that map fills entire content pane
     parser.parse();
@@ -42,8 +44,8 @@ require([
     var popup = Popup({
         titleInBody: false
     }, "popupDiv");
-    popup.setTitle("Market Opportunity");
-    popup.resize(300, 200);
+    popup.setTitle("VALUE");
+    popup.resize(100, 100);
 
     var map = new Map("map", {
         basemap: "topo",
@@ -84,6 +86,8 @@ require([
 
     map.addLayers([layer]);
 
+    var rasterIdentify = new RasterIdentify(map);
+
     // add the drawing toolbar (for polygon selections)
     var currentProdValue;
     var studyArea;
@@ -105,6 +109,8 @@ require([
         });
 
         toolbar.deactivate();
+
+		rasterIdentify.resume();
     });
 
 
@@ -114,8 +120,7 @@ require([
     var increaseValue;
     
     var currentstep = "INIT";
-
-
+    
     $("#metadataButton").button().click(function () {
         $("#metadataContent").slideToggle();
     });
@@ -127,15 +132,18 @@ require([
             layer.setVisibleLayers([cropLayers[crop].index]);
             layer.show();
             currentstep = "STEP1";
+            rasterIdentify.start(layer.url, [cropLayers[crop].index]);
         } else {
             layer.setVisibleLayers([-1]);
             currentstep = "INIT";
+            rasterIdentify.stop();
         }
         legend.refresh();
     });
 
     $("#polygonButton").button().click(function () {
         if (currentstep == "STEP1") {
+			rasterIdentify.pause();
             toolbar.activate(Draw.POLYGON);
         } else if (currentstep == "INIT") {
             alert("Please select a crop.");
@@ -162,11 +170,14 @@ require([
         dialogClass: 'dialogClass',
         buttons: {
             "Choose Point": function () {
+                rasterIdentify.pause();
+
                 var distanceVal = parseFloat($("#bufferDistanceInput").val());
 
                 if (distanceVal > 0) {
                     map.setMapCursor("crosshair");
                     mapClick = map.on("click", function (evt) {
+						rasterIdentify.resume();
                         map.setMapCursor("default");
                         mapClick.remove();
 
@@ -230,6 +241,7 @@ require([
         currentstep = "INIT";
         studyArea = null;
         map.infoWindow.hide();
+        rasterIdentify.stop();
     });
 
     var currentStorageCapacity;

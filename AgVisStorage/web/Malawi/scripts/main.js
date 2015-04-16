@@ -19,6 +19,7 @@ require([
     "dojo/parser", "dojo/on",
     "appConfig/defaults",
     "app/GeometryOperations", "app/ProductionTools",
+    "app/RasterIdentify",
     "dijit/layout/BorderContainer", "dijit/layout/ContentPane",
     "dijit/layout/AccordionContainer", "dojo/domReady!"
 ], function (
@@ -38,7 +39,8 @@ require([
     SimpleFillSymbol,
     parser,on,
     config, 
-    GeometryOperations, ProductionTools
+    GeometryOperations, ProductionTools,
+    RasterIdentify
 ) {
     // call this here to ensure that map fills entire content pane
     parser.parse();
@@ -56,8 +58,8 @@ require([
     var popup = Popup({
         titleInBody: false
     }, "popupDiv");
-    popup.setTitle("Market Opportunity");
-    popup.resize(300, 200);
+    popup.setTitle("VALUE");
+    popup.resize(100, 100);
 
     var map = new Map("map", {
         basemap: "topo",
@@ -141,6 +143,8 @@ require([
     var toolbar = new Draw(map);
     toolbar.on("draw-end", onPolygonComplete);
 
+    var rasterIdentify = new RasterIdentify(map);
+
     var pixelCount;
     var productionValue;
     var increaseValue;
@@ -162,6 +166,7 @@ require([
     });
 
     $("#polygonButton").button().click(function () {
+        rasterIdentify.pause();
         toolbar.activate(Draw.POLYGON);
     });
 
@@ -259,6 +264,7 @@ require([
         $("#resultsDiv").hide();
 
         studyArea = null;
+        rasterIdentify.stop();
     });
 
     $("#districtSummaryDiv a").click(function () {
@@ -329,15 +335,17 @@ require([
             $("#step1div").hide();
             $("#step1ResultDiv").show();
             $("#step2div").show();
+            rasterIdentify.start(layer.url, [cropLayers[crop].index]);
         } else {
             layer.setVisibleLayers([-1]);
+            rasterIdentify.stop();
         }
         legend.refresh();
     }
 
     function selectDistrict() {
         //var layer = map.getLayer("districts");
-
+        rasterIdentify.pause();
         map.setMapCursor("crosshair");
 
         // need to listen on highlight layer because it's masking the districts layer
@@ -367,6 +375,8 @@ require([
 
             map.setMapCursor("default");
             listener.remove();
+
+            rasterIdentify.resume();
         });        
     }
 
@@ -385,10 +395,10 @@ require([
         var currentCrop = $('#cropLayerInput').val();
         if (currentCrop.indexOf("GROU") > -1) {
             relatedQuery.definitionExpression = "Groundnut = 1";
-            console.log("GROUNDNUT");
+            //console.log("GROUNDNUT");
         } else if (currentCrop.indexOf("SOYB") > -1) {
             relatedQuery.definitionExpression = "Soybean = 1";
-            console.log("SOYBEAN");
+            //console.log("SOYBEAN");
         }
         var layer = map.getLayer("districts");
         layer.queryRelatedFeatures(relatedQuery, function (relatedRecords) {
@@ -456,6 +466,8 @@ require([
         var graphic = new Graphic(evt.geometry, new SimpleFillSymbol());
         map.graphics.add(graphic);
 
+        rasterIdentify.resume();
+
         studyArea = evt.geometry;
 
         $("#busy").show();
@@ -465,6 +477,7 @@ require([
     }
 
     function selectPoint(distanceVal) {
+        rasterIdentify.pause();
         map.setMapCursor("crosshair");
         mapClick = map.on("click", function (evt) {
             map.setMapCursor("default");
@@ -475,6 +488,8 @@ require([
                 studyArea = geometries[0];
                 productionTools.calculateProduction(geometries, $("#cropLayerInput").val(), onCalculateProductionResult);
             });
+
+            rasterIdentify.resume();
         });
     }
 
@@ -516,7 +531,7 @@ require([
         $("#totalCurrentUtilizationValue").html(result.currentUtilization + " mt");
         
         currentStorageCapacity = result.currentCapacity;
-        console.log(currentStorageCapacity);
+        //console.log(currentStorageCapacity);
 
         $("#step4div").hide();
         $("#step5div").show();
@@ -524,6 +539,8 @@ require([
     }
 
     function calculateMarketOpportunity() {
+        popup.resize(100, 100);
+
         result = productionTools.calculateMarketOpportunity(
                 increaseProductionValue,
                 currentUtilizationPercent,
@@ -628,7 +645,7 @@ require([
     }
 
     function graphicsToCSV(graphics) {
-        console.log(graphics);
+        //console.log(graphics);
         
         var data = [["DISTRICT", "COMPANY NAME", "SIZE", "MARKET FUNCTION", "TRADING CENTER", "GROUNDNUT","SOYBEAN"]];
         $.each(graphics, function (idx, graphic) {

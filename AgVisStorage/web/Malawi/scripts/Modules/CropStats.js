@@ -47,7 +47,7 @@ define([
 		            var retVal = {};
 
 		            $.each(results, function (idx, result) {
-		                console.log(result.paramName);
+		                //console.log(result.paramName);
 		                if (result.paramName == "OutputCount") {
 		                    retVal.pixelCount = result.value;
 		                } else if (result.paramName == "OutputValue") {

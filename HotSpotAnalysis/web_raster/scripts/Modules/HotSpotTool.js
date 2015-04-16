@@ -144,13 +144,13 @@ define([
     function drawLegend() {
         // these *should* correspond to the colors in that the service returns
         var colors = {
-            'hot1': { label: 'Hot (p <= 0.01)', color: new Color([178, 24, 43]) }, //lowest p-value hot spot
-            'hot2': { label: 'Hot (p <= 0.05)', color: new Color([239, 138, 98]) },
-            'hot3': { label: 'Hot (p <= 0.1)', color: new Color([253, 219, 199]) }, // highest p-value hot spot
-            'default': { label: 'Default', color: new Color([247, 247, 247]) }, // not statistically significant
-            'cold1': { label: 'Cold (p <= 0.01)', color: new Color([209, 229, 240]) }, // lowest p-value cold spot
-            'cold2': { label: 'Cold (p <= 0.05)', color: new Color([103, 169, 207]) },
-            'cold3': { label: 'Cold (p <= 0.1)', color: new Color([33, 102, 172]) }  // highest p-value cold spot
+            'hot1': { label: '3: Hot (p <= 0.01)', color: new Color([178, 24, 43]) }, //lowest p-value hot spot
+            'hot2': { label: '2: Hot (p <= 0.05)', color: new Color([239, 138, 98]) },
+            'hot3': { label: '1: Hot (p <= 0.1)', color: new Color([253, 219, 199]) }, // highest p-value hot spot
+            'default': { label: '0: Default', color: new Color([247, 247, 247]) }, // not statistically significant
+            'cold1': { label: '-1: Cold (p <= 0.01)', color: new Color([209, 229, 240]) }, // lowest p-value cold spot
+            'cold2': { label: '-1: Cold (p <= 0.05)', color: new Color([103, 169, 207]) },
+            'cold3': { label: '-3: Cold (p <= 0.1)', color: new Color([33, 102, 172]) }  // highest p-value cold spot
         }
 
         // draw legend

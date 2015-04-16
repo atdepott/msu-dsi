@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Data Mining: PCA Feature Selection</title>
+    <title>Data Mining: Principal Component Analysis (PCA) Feature Selection</title>
 
     <link rel="icon" href="http://dsiweb.cse.msu.edu/img/Spartan-helmet.gif">
 
@@ -41,7 +41,7 @@
         
         <div class="row">
             <div>
-                <p>Upload a file to create features using PCA:</p>
+                <p>Upload a file to create features using principal component analysis:</p>
                 <input id="uploadFile" type="file" style="width:100%" accept=".csv" />
                 
             </div>
@@ -51,6 +51,18 @@
             <div id="result">
             </div>
         </div>
+
+        <div class="row">
+            <div>
+                <h4>Sample Data</h4>
+                <p>
+                    The goal of the project is to determine the most relevant parameters for determining drought condition for all stream segments within the study area. The data set consists of 2000 records. The first column in the table represents the median flow in the driest month of the year and the rest of the columns are predictive variables. Columns 4 to 20 are the physiographical parameters; columns 21to 44 are the stream flow parameters; and columns 45 to 69 are the weather related (more specifically precipitation) parameters.
+                </p>
+                Download example <a id="downloadFile" href="featuresel_data.csv">here</a>
+            </div>
+        </div>
+
+        
     </div>
     <div id="dialog" title="Upload CSV">
         Select data columns by holding shift and clicking column names:

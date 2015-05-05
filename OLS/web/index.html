@@ -89,23 +89,47 @@
                 </div>
 
                 <div>
-                    <span class="tool-title-style">Results</span>
+                    <span class="tool-title-style">Analysis Results</span>
                     <span style="display:block; text-align:center; width:100%;">
                         <input id="simpleResultsButton" type="button" value="Basic Results" class="toolbutton" style="display:none" />
                         <input id="advancedResultsButton" type="button" value="Advanced Results" class="toolbutton" style="display:none" />
                         <input id="resultStatsButton" type="button" value="Result Statistics" class="toolbutton" style="display:none" />
                     </span>
+                </div>
+
+                <div>
+                    <span class="tool-title-style">Step 3: Make Prediction</span>
+                    <div id="predictionDiv" style="display:none">
+                        <span>Upload a CSV with identical data columns to calculate a prediction.</span>
+                        <span style="display:block; text-align:center; width:100%;">
+                            <input id="uploadFile2" type="file" style="width:100%" accept=".csv" />
+                        </span>
+                        
+                    </div>
+                </div>
+
+                <div>
+                    <span class="tool-title-style">Prediction Results</span>
+                    <span style="display:block; text-align:center; width:100%;">
+                        <a id="downloadLink" style="display:none" href="#">Download</a>
+                    </span>
+                </div>
+
+                <div>
+                    <span class="tool-title-style">Restart</span>
                     <span style="display:block; text-align:center; width:100%;">
                         <input id="clearButton" type="button" value="Clear" class="toolbutton" />
                     </span>
                 </div>
+
             </div>
+
 
             <div data-dojo-type="dijit/layout/ContentPane"
                  data-dojo-props="region:'center'">
                 <div class="title-style">Tool Description</div>
                 <div>
-                    Find a relationship between variables in your dataset using Ordinary Least Squares. This application supports any geocoded CSV files.
+                    Find relationships between variables in your dataset using Ordinary Least Squares, and optionally use this information to make predictions about other data points. This application supports any geocoded CSV files.
                     <br><br>
 
                     <!--<a href="#" onclick="showhide('testdiv', 'block'); return false">Show Sample Data Citation</a> | <a href="#" onclick="showhide('testdiv', 'none'); return false">Hide</a>
@@ -162,7 +186,7 @@
         </div>
 
         <div id="resultStats" title="Statistics">
-            <table class="resultTable"><tbody></tbody></table>
+            <table class="resultTable"><thead><tr><td>Statistic</td><td>Value</td><td>Description</td></tr></thead><tbody></tbody></table>
         </div>
 
     </div>

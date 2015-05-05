@@ -22,31 +22,17 @@ define([
 
     var linesymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0, 0, 0, 1]), 2);
 
-    //var colors = {
-    //    'hot1': { label: 'Hot (p <= 0.01)', color: new Color([178, 24, 43]) }, //lowest p-value hot spot
-    //    'hot2': { label: 'Hot (p <= 0.05)', color: new Color([239, 138, 98]) },
-    //    'hot3': { label: 'Hot (p <= 0.1)', color: new Color([253, 219, 199]) }, // highest p-value hot spot
-    //    'default': { label: 'Default', color: new Color([247, 247, 247])}, // not statistically significant
-    //    'cold1': { label: 'Cold (p <= 0.01)', color: new Color([209, 229, 240]) }, // lowest p-value cold spot
-    //    'cold2': { label: 'Cold (p <= 0.05)', color: new Color([103, 169, 207]) },
-    //    'cold3': { label: 'Cold (p <= 0.1)', color: new Color([33, 102, 172]) }  // highest p-value cold spot
-    //}
-
-    //var graphics_circles = {};
-
-    //$.each(colors, function (classy, obj) {
-    //    graphics_circles[classy] = new SimpleMarkerSymbol(
-    //        SimpleMarkerSymbol.STYLE_CIRCLE,
-    //        12,
-    //        linesymbol,
-    //        obj.color)
-    //});
-
     var outsymbol = new SimpleMarkerSymbol(
             SimpleMarkerSymbol.STYLE_CIRCLE,
             12,
             linesymbol,
             new Color([103, 169, 207]));
+
+    var predictsymbol = new SimpleMarkerSymbol(
+        SimpleMarkerSymbol.STYLE_CIRCLE,
+        12,
+        linesymbol,
+        new Color([255, 255, 102]));
 
     // number of X variables the GP service is expecting
     var expectedVariableCount = 5;
@@ -61,6 +47,7 @@ define([
             
             var self = this;
             var gpUrl = this.url;
+            this.coefficients = undefined;
 
             self.map.graphics.clear();
 
@@ -134,7 +121,7 @@ define([
                         // build infotemplate:
                         var infoContent = "<table>";
                         // regression result fields:
-                        infoContent += "<tr><td>Estimated:</td><td>${Estimated}</td></tr><tr><td>Residual:</td><td>${Residual}</td></tr><tr><td>StdResid:</td><td>${StdResid}</td></tr>";
+                        infoContent += "<tr><td>Estimated:</td><td>${Estimated:NumberFormat(places:5)}</td></tr><tr><td>Residual:</td><td>${Residual:NumberFormat(places:5)}</td></tr><tr><td>StdResid:</td><td>${StdResid:NumberFormat(places:5)}</td></tr>";
                         // grab original attribute names:
                         //infoContent += "<tr><td>ORIGINAL DATA</td></tr>"
                         $.each(attributeMap, function (key, value) {
@@ -160,14 +147,21 @@ define([
                         var aTable = $("#advancedResults tbody");
                         aTable.empty();
 
+                        // save these for the prediction
+                        self.coefficients = { dependantName: dependantName, X: {}, INTERCEPT: undefined };
+
                         $.each(result.value.features, function (idx, feature) {
-                            // SIMPLE RESULTS
+                            // SIMPLE RESULTS    
                             var srow = $("<tr/>").appendTo(sTable);
                             var variableName = feature.attributes["Variable"];
                             if (variableName == "Intercept") {
                                 $("<td>").text("Intercept").appendTo(srow);
+                                self.coefficients.INTERCEPT = feature.attributes["Coef"];
+                                console.log(self.coefficients);
                             } else {
                                 $("<td>").text(attributeMap[variableName]).appendTo(srow);
+                                self.coefficients.X[attributeMap[variableName]] = feature.attributes["Coef"];
+                                console.log(self.coefficients);
                             }
                             $("<td>").text(feature.attributes["Coef"]).appendTo(srow);
 
@@ -196,9 +190,9 @@ define([
                         sTable.empty();
                         
                         $.each(result.value.features, function (idx, feature) {
-                            // SIMPLE RESULTS
+                            // STATISTICS
                             var srow = $("<tr/>").appendTo(sTable);
-                            $("<td class='diagname'>").text(feature.attributes["Diag_Name"]).appendTo(srow);
+                            $("<td>").text(feature.attributes["Diag_Name"]).appendTo(srow);
                             $("<td>").text(feature.attributes["Diag_Value"]).appendTo(srow);
                             $("<td>").text(feature.attributes["Definition"]).appendTo(srow);
                         });
@@ -214,27 +208,40 @@ define([
         },
         clear: function () {
             this.map.graphics.clear();
+            this.coefficients = undefined;
+        },
+        doPrediction: function (graphics) {
+            var newgraphics = [];
+            var coefficients = this.coefficients;
+            console.log(coefficients);
+            var error = "";
+            $.each(graphics, function (idx, graphic) {
+                graphic.setSymbol(predictsymbol);
+                y = coefficients.INTERCEPT;
+                $.each(coefficients.X, function (key, value) {
+                    if (typeof graphic.attributes[key] == 'undefined' || isNaN(graphic.attributes[key])) {
+                        error = 'Data variable ' + key + ' is missing or nonnumerical on a data point. Please try again with a different dataset.';
+                        return false;
+                    } else {
+                        y += value * graphic.attributes[key];
+                    }
+                });
+                if (error != "") {
+                    return false;
+                } else {
+                    graphic.attributes[coefficients.dependantName] = y;
+                    newgraphics.push(graphic);
+                }
+            });
+            if (error != "") {
+                console.log(error);
+                return { "ERROR": error };
+            } else {
+                return { "points": newgraphics };
+            }
         }
+
     });
 
-    /*
-    function getSymbol(pvalue, zscore) {
-        if (pvalue <= 0.01 && zscore > 0) {
-            return graphics_circles['hot1'];
-        } else if (pvalue <= 0.01 && zscore <= 0) {
-            return graphics_circles['cold1'];
-        } else if (pvalue <= 0.05 && zscore > 0) {
-            return graphics_circles['hot2'];
-        } else if (pvalue <= 0.05 && zscore <= 0) {
-            return graphics_circles['cold2'];
-        } else if (pvalue <= 0.1 && zscore > 0) {
-            return graphics_circles['hot3'];
-        } else if (pvalue <= 0.1 && zscore <= 0) {
-            return graphics_circles['cold3'];
-        } else {
-            return graphics_circles['default'];
-        }
-    }
-    */
 });
 

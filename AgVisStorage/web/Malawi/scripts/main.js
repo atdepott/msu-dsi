@@ -539,7 +539,7 @@ require([
     }
 
     function calculateMarketOpportunity() {
-        popup.resize(100, 100);
+        popup.resize(200, 200);
 
         result = productionTools.calculateMarketOpportunity(
                 increaseProductionValue,

@@ -65,7 +65,7 @@ require([
 
     var csvstring;
     var points;
-    var dependantfield;
+    var dependantfield, latfield, lonfield, valFields;
 
     $("#uploadFile").change(function () {
         var file = this.files[0];
@@ -150,9 +150,14 @@ require([
         map.graphics.clear();
         points = undefined;
         dependantfield = undefined;
+        latfield = undefined;
+        lonfield = undefined;
+        valFields = undefined;
 
-        // replace file uploader
+        // replace file uploaders
         var control = $("#uploadFile");
+        control.replaceWith(control.val('').clone(true));
+        control = $("#uploadFile2");
         control.replaceWith(control.val('').clone(true));
 
         $("#simpleResultsButton").hide();
@@ -161,7 +166,8 @@ require([
         $("#advancedResults tbody").empty();
         $("#resultStatsButton").hide();
         $("#resultStats tbody").empty();
-
+        $("#predictionDiv").hide();
+        $("#downloadLink").hide();
     });
 
     $("#simpleResultsButton").button().click(function () {
@@ -183,8 +189,8 @@ require([
         dialogClass: 'dialogClass',
         buttons: {
             "OK": function () {
-                var latfield = $("#latNameInput").val();
-                var lonfield = $("#lonNameInput").val();
+                latfield = $("#latNameInput").val();
+                lonfield = $("#lonNameInput").val();
                 
                 // get selected column header and index
                 dependantfield = $("#dependantColumn").val();
@@ -269,6 +275,51 @@ require([
         $("#simpleResultsButton").show();
         $("#advancedResultsButton").show();
         $("#resultStatsButton").show();
+        $("#predictionDiv").show();
+    }
+
+    $("#uploadFile2").change(function () {
+        var file = this.files[0];
+        if (file.data) {
+            var decoded = bytesToString(dojox.encoding.base64.decode(file.data));
+            handlePredictionFile(decoded);
+        } else {
+            var reader = new FileReader();
+            reader.onload = function () {
+                handlePredictionFile(reader.result)
+            };
+            reader.readAsText(file);
+        }
+    });
+
+    function handlePredictionFile(_csvstring) {
+        resultObj = csvTool.csvToGraphicsAdv(_csvstring, latfield, lonfield, valfields, undefined, dependantfield);
+
+        if (typeof resultObj.ERROR != 'undefined') {
+            alert("ERROR: " + resultObj.ERROR);
+
+        } else {
+            var csvpoints = resultObj.points;
+            resultObj2 = gpTool.doPrediction(csvpoints)
+            if (typeof resultObj2.ERROR != 'undefined') {
+                alert("ERROR: " + resultObj2.ERROR);
+            }
+            else {
+                predictionpoints = resultObj2.points;
+
+                // add to map
+                map.setExtent(graphicsUtils.graphicsExtent(predictionpoints));
+                $.each(predictionpoints, function (idx, graphic) {
+                    map.graphics.add(graphic);
+                });
+
+                // create downloadable CSV
+                var csv = csvTool.graphicsToCSV(predictionpoints);
+                var encodedUri = encodeURI("data:text/csv;charset=utf-8," + csv);
+                $("#downloadLink").button().attr({ "href": encodedUri, "download": "prediction.csv" }).show();
+            }
+        }
+
     }
 });
 

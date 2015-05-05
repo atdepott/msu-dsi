@@ -35,6 +35,7 @@ define([
             var result = Papa.parse(csvstring, { header: true });
             return result.meta.fields;
         },
+
         csvToGraphics: function (csvstring, latField, lonField, valField) {
             var result = Papa.parse(csvstring, { header: true });
             
@@ -50,7 +51,8 @@ define([
         },
 
         // creates graphics with multiple attributes
-        csvToGraphicsAdv: function (csvstring, latField, lonField, valFields, depField) {
+        // predictField is field that gets added to infotemplate but doesn't get parsed out of CSV
+        csvToGraphicsAdv: function (csvstring, latField, lonField, valFields, depField, predictField) {
             var result = Papa.parse(csvstring, { header: true, fastMode: false });
             
             var graphics = [];
@@ -70,23 +72,30 @@ define([
                     // add independant variables to infowindow and graphic attributes:
                     $.each(valFields, function (idx, valField) {
                         var attribval = row[valField];
-                        if (!isNaN(attribval)) {
+                        if (typeof attribval == 'undefined' || !isNaN(attribval)) {
                             attribs[valField] = parseFloat(attribval);
                             infocontent = infocontent + "<tr><td>" + valField + ": </td><td>${" + valField + "}</td></tr>";
                         } else {
-                            error = "Data variable " + valField + " can only contain numerical values!";
+                            error = "Data variable " + valField + " contains a non-numerical values or is missing.";
                             return false;
                         }
                     });
 
-                    // add dependant variable to infowindow and graphic attributes:
-                    var dependantattribval = row[depField];
-                    if (!isNaN(dependantattribval)) {
-                        infocontent = infocontent + "<tr><td>" + depField + ":</td><td>" + row[depField] + "</td></tr>";
-                        attribs[depField] = parseFloat(row[depField]);
-                    } else {
-                        error = "Dependant variable " + depField + " can only contain numerical values!";
-                        return false;
+                    if (typeof depField != 'undefined') {
+                        // add dependant variable to infowindow and graphic attributes:
+                        var dependantattribval = row[depField];
+                        if (!isNaN(dependantattribval)) {
+                            infocontent = infocontent + "<tr><td>" + depField + ":</td><td>" + row[depField] + "</td></tr>";
+                            attribs[depField] = parseFloat(row[depField]);
+                        } else {
+                            error = "Dependant variable " + depField + " can only contain numerical values!";
+                            return false;
+                        }
+                    }
+
+                    // add this field to the infotemplate but don't try to get it from CSV
+                    if (typeof predictField != 'undefined') {
+                        infocontent = infocontent + "<tr><td>Predicted " + predictField + ":</td><td>${" + predictField + ":NumberFormat(places:10)}</td></tr>";
                     }
 
                     infocontent = infocontent + "</table>";
@@ -103,6 +112,17 @@ define([
             } else {
                 return { "points": graphics };
             }
+        },
+
+        // returns a CSV-formatted string representing the graphics objects
+        graphicsToCSV: function (graphics) {
+            var attribsobj = $.map(graphics, function (obj) { 
+                obj.attributes["LATITUDE"] = obj.geometry.y;
+                obj.attributes["LONGITUDE"] = obj.geometry.x;
+                return obj.attributes;
+            });
+            var resultstring = Papa.unparse(attribsobj);
+            return resultstring;
         }
     });
 });

@@ -85,8 +85,6 @@ require([
         csvstring = _csvstring;
         var headers = csvTool.getHeaders(csvstring);
 
-        // TODO check if we have enough rows
-
         var opts_lat = [];
         var opts_lon = [];
         var opts_val = [];

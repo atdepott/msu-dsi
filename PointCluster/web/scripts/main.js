@@ -100,28 +100,29 @@ require([
         var opts_lat = [];
         var opts_lon = [];
         var opts_val = [];
-        var latidx = -1;
-        var lonidx = -1;
-        var validx = -1;
-        $.each(headers, function (headername, headerIdx) {
+        var latfield = "";
+        var lonfield = "";
+
+        // build options object and find default values
+        $.each(headers, function (idx, headername) {
             if (headername.toUpperCase() == "LATITUDE" ||
                 headername.toUpperCase() == "LAT" ||
+                headername.toUpperCase() == "POINT_Y" ||
                 headername.toUpperCase() == "Y") {
-                latidx = headerIdx;
+                latfield = headername;
             } else if (headername.toUpperCase() == "LONGITUDE" ||
                 headername.toUpperCase() == "LON" ||
                 headername.toUpperCase() == "LONG" ||
+                headername.toUpperCase() == "POINT_X" ||
                 headername.toUpperCase() == "X") {
-                lonidx = headerIdx;
-            } else {
-                validx = headerIdx;
+                lonfield = headername;
             }
 
-            opt = $("<option/>").text(headername).val(headerIdx);
+            opt = $("<option/>").text(headername).val(headername);
             opts_lat.push(opt);
-            opt = $("<option/>").text(headername).val(headerIdx);
+            opt = $("<option/>").text(headername).val(headername);
             opts_lon.push(opt);
-            opt = $("<option/>").text(headername).val(headerIdx);
+            opt = $("<option/>").text(headername).val(headername);
             opts_val.push(opt);
         });
         $("#latNameInput").empty();
@@ -131,16 +132,15 @@ require([
         $("#valNameInput").empty();
         $("#valNameInput").append(opts_val);
 
-        if (latidx > -1) {
-            $("#latNameInput").val(latidx);
+        // set default values, if we have them
+        if (latfield != "") {
+            $("#latNameInput").val(latfield);
         }
-        if (lonidx > -1) {
-            $("#lonNameInput").val(lonidx);
-        }
-        if (validx > -1) {
-            $("#valNameInput").val(validx);
+        if (lonfield != "") {
+            $("#lonNameInput").val(lonfield);
         }
 
+        // show dialog box
         $("#csvDialog").dialog("open");
     }
 
@@ -174,12 +174,12 @@ require([
         dialogClass: 'dialogClass',
         buttons: {
             "OK": function () {
-                var latIdx = $("#latNameInput").val();
-                var lonIdx = $("#lonNameInput").val();
-                var valIdx = $("#valNameInput").val();
+                var latfield = $("#latNameInput").val();
+                var lonfield = $("#lonNameInput").val();
+                var valfield = $("#valNameInput").val();
 
                 map.graphics.clear();
-                points = csvTool.csvToGraphics(csvstring, latIdx, lonIdx, valIdx);
+                points = csvTool.csvToGraphics(csvstring, latfield, lonfield, valfield);
                 map.setExtent(graphicsUtils.graphicsExtent(points));
                 $.each(points, function (idx, graphic) {
                     map.graphics.add(graphic);

@@ -18,43 +18,69 @@
              data-dojo-type="dijit/layout/ContentPane"
              data-dojo-props="region:'top'">
             <div id="title" data-dojo-type="dijit/layout/ContentPane">
-                Hot and Cold Spot Analysis Help
+                Ordinary Least Squares Analysis Help
             </div>
         </div>
         <div id="helpcontent"
              data-dojo-type="dijit/layout/ContentPane"
              data-dojo-props="region:'center'">
             <p>
-                This application find hot and cold spots in geospatial data.
-                For more information on this analysis, 
-                please click <a href="http://resources.arcgis.com/en/help/main/10.2/index.html#/How_Hot_Spot_Analysis_Getis_Ord_Gi_works/005p00000011000000/" target="_blank">here</a>.
+                This application uses Ordinary Least Squares to find relationships between variables in your dataset. 
+                You can also use this information to make predictions about other data points with the same schema. 
+                For more information about this tool, please click <a href="http://resources.arcgis.com/en/help/main/10.2/index.html#/How_OLS_regression_works/005p0000002z000000/" target="_blank">here</a>.
             </p>
-            <h3>Hot and Cold Spot Analysis Tool</h3>
+            <h3>Ordinary Least Squares Analysis Tool</h3>
             <h4>Step 1</h4>
             <p>
                 Click the "Choose File" button and navigate to a csv file that contains at the minimum a latitude or Y 
-                column, a longitude or X column, and a value column.
+                column, a longitude or X column, and dependant variable column, and data variable columns.
             </p>
-            <img src="styles/helpimages/hs_step1.png" />
+            <img src="styles/helpimages/ols_step1.png" />
             <p>
-                A popup will appear.  Choose the column for the latitude, longitude, and value that you wish to map 
-                and click "Ok".
+                A popup will appear.  Choose the columns for the latitude, longitude, and dependant variables.  
+                Hold down shift or control and to select multiple data columns.  Click "Ok".
             </p>
-            <img src="styles/helpimages/hs_step2.png" />
+            <img src="styles/helpimages/ols_step2.png" />
             <p>
                 Your points should be mapped.  To view the value for each point, click on it.
             </p>
-            <img src="styles/helpimages/hs_step3.png" />
+            <img src="styles/helpimages/ols_step3.png" />
             <h4>Step 2</h4>
             <p>
                 Click "Calculate".
             </p>
-            <h4>Results</h4>
+            <h4>Analysis Results</h4>
             <p>
-                After a short time, the map should display your layer with different symbols. Default points are shown in white, hot spots are shown in red, and cold spots are shown in blue.  
+                After a short time, a popup should appear with your results.  Click "OK" to close the popup.
+            </p>
+            <img src="styles/helpimages/ols_results1.png" />
+            <p>
+                The map should display your layer with a new color. You can click each point to view more information about the analysis.
+            </p>
+            <img src="styles/helpimages/ols_results2.png" />
+            <p>
+                You can view the results popup again by clicking the "Basic Results" button, or view more detailed results with the "Advanced Results" button.
+                For diagnostic information on the analysis process, click "Result Statistics".  More information is available about the tool that calculates these
+                results  
+                <a href="http://resources.arcgis.com/en/help/main/10.2/index.html#/Interpreting_OLS_results/005p00000030000000/" target="_blank">here</a>.
+            </p>
+            <img src="styles/helpimages/ols_results3.png" />
+            <h4>Step 3</h4>
+            <p>
+                Optionally, you can upload another data file with the same data columns to use the results of your previous analysis to 
+                find predicted values for your dependant variable.  Click the "Choose File" button and navigate to a csv file that contains at the minimum a latitude or Y
+                column, a longitude or X column, and the same data columns as your previous analysis.
+            </p>
+            <img src="styles/helpimages/ols_step4.png" />
+            <h4>Prediction Results</h4>
+            <p>
+                The map will show your new data points in yellow.  Click on a point to view the predicted value.
+                You can also click the "Download" button to download a new CSV containing your predicted values.
+            </p>
+            <img src="styles/helpimages/ols_results4.png"/>
+            <p>
                 You can clear the map to begin with a new dataset by clicking the "Clear" button.
             </p>
-            <img src="styles/helpimages/hs_results.png" />
             <h3>Basemap picker</h3>
             <p>
                 Click the basemap button to toggle between the topographic basemap and a satellite imagery basemap.

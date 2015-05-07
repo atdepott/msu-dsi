@@ -313,8 +313,17 @@ require([
 
                 // create downloadable CSV
                 var csv = csvTool.graphicsToCSV(predictionpoints);
-                var encodedUri = encodeURI("data:text/csv;charset=utf-8," + csv);
-                $("#downloadLink").button().attr({ "href": encodedUri, "download": "prediction.csv" }).show();
+                var blob = new Blob([csv], { type: 'text/csv' });
+                // handle differently in IE than other browsers because IE does not allow data URIs
+                if (window.navigator.msSaveOrOpenBlob) {
+                    $("#downloadLink").click(function () {
+                        window.navigator.msSaveOrOpenBlob(blob, "prediction.csv");
+                    });
+                } else {
+                    var encodedUri = URL.createObjectURL(blob);
+                    $("#downloadLink").button().attr({ "href": encodedUri, "download": "prediction.csv" });
+                }
+                $("#downloadLink").show();
             }
         }
 

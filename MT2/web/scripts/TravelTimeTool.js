@@ -279,18 +279,29 @@ define([
 
     function exportToCSV() {
         var data = [["NAME1", "NAME2", "NAME3", "NAME4", "NAME5","COUNTRYNM","TIME","POPULATION"]];
-        //data.append
         $.each(timeObjs, function (idx, city) {
             data.push(city);
         })
 
-        //var csvContent = "data:text/csv;charset=utf-8,";
         var csvContent = "";
         $.each(data, function (index, infoArray) {
             dataString = infoArray.join(",");
             csvContent += dataString + "\n";
         });
-        //var encodedUri = encodeURI(csvContent);
+        
+        var blob = new Blob([csvContent], { type: 'text/csv' });
+        // handle differently in IE than other browsers because IE does not allow data URIs
+        if (window.navigator.msSaveOrOpenBlob) {
+            $("#invisibleLink").click(function () {
+                window.navigator.msSaveOrOpenBlob(blob, "MT2_traveltimes.csv");
+            });
+        } else {
+            var encodedUri = URL.createObjectURL(blob);
+            $("#invisibleLink").button().attr({ "href": encodedUri, "download": "MT2_traveltimes.csv" });
+        }
+        document.getElementById("invisibleLink").click();
+
+        /*
         var blob = new Blob([csvContent], { type: 'text/csv' });
         var encodedUri = URL.createObjectURL(blob);
 
@@ -299,7 +310,7 @@ define([
         var url = URL.createObjectURL(blob);
         link.attr("download", "MT2_traveltimes.csv");
         document.getElementById("invisibleLink").click();
-
+        */
     }
 
     function hideGoogleMap() {

@@ -14,6 +14,7 @@ require([
     "app/ExpressionBuilder",
     "app/MetadataHelper",
     "app/RasterIdentify",
+    "app/BorderHelper",
     "dijit/layout/BorderContainer", "dijit/layout/ContentPane",
     "dijit/layout/AccordionContainer", "dojo/domReady!"
 ], function (
@@ -30,7 +31,8 @@ require([
     GeometryOperations, AdvancedRasterMath,
     ExpressionBuilder,
     MetadataHelper,
-    RasterIdentify
+    RasterIdentify,
+    BorderHelper
 ) {
     // call this here to ensure that map fills entire content pane
     parser.parse();
@@ -109,6 +111,7 @@ require([
     var geometryOps = new GeometryOperations(map, config.geometryServiceURL);
     var mathTool = new AdvancedRasterMath(map, config.mathToolUrl, config.mathToolMapUrl);
     var rasterIdentify = new RasterIdentify(map);
+    var borderHelper = new BorderHelper(map);
 
     var currentExpr;
     var currentResultLayer;
@@ -223,6 +226,17 @@ require([
         if (typeof currentExpr != 'undefined') {
             rasterIdentify.stop();
             toolbar.activate(Draw.POLYGON);
+        } else {
+            alert("Please choose an expression before defining an area.");
+        }
+    });
+
+    $("#borderButton").button().click(function () {
+        if (typeof currentExpr != 'undefined') {
+            rasterIdentify.stop();
+            borderHelper.getBorder(function (graphic) {
+                mathTool.add([graphic.geometry], currentExpr, onRasterMathResult);
+            });
         } else {
             alert("Please choose an expression before defining an area.");
         }

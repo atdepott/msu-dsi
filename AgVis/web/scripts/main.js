@@ -12,6 +12,7 @@ require([
     "appConfig/defaults",
     "app/GeometryOperations", "app/ProductionTools",
     "app/RasterIdentify",
+    "app/BorderHelper",
     "dijit/layout/BorderContainer", "dijit/layout/ContentPane",
     "dijit/layout/AccordionContainer", "dojo/domReady!"
 ], function (
@@ -26,7 +27,8 @@ require([
     parser,on,
     config, 
     GeometryOperations, ProductionTools,
-    RasterIdentify
+    RasterIdentify,
+    BorderHelper
 ) {
     // call this here to ensure that map fills entire content pane
     parser.parse();
@@ -66,6 +68,7 @@ require([
     var geometryOps = new GeometryOperations(map, config.geometryServiceURL);
     var productionTools = new ProductionTools(map, config.cropStatsUrl);
     var rasterIdentify = new RasterIdentify(map);
+    var borderHelper = new BorderHelper(map);
 
     var layer = new ArcGISDynamicMapServiceLayer(config.cropsUrl, {
         mode: ArcGISDynamicMapServiceLayer.MODE_ONDEMAND,
@@ -137,6 +140,26 @@ require([
         if (currentstep == "STEP1") {
             rasterIdentify.stop();
             toolbar.activate(Draw.POLYGON);
+        } else if (currentstep == "INIT") {
+            alert("Please select a crop.");
+        } else {
+            alert("To choose another area, please clear and restart your analysis.");
+        }
+    });
+
+    $("#borderButton").button().click(function () {
+        if (currentstep == "STEP1") {
+            rasterIdentify.stop();
+            borderHelper.getBorder(function (graphic) {
+                productionTools.calculateProduction([graphic.geometry], $("#cropLayerInput").val(), function (result) {
+                    pixelCount = result.pixelCount;
+                    productionValue = result.productionValue;
+                    $("#pixelCount").html(result.pixelCount);
+                    $("#prodValue").html(result.productionValue + " mt");
+
+                    currentstep = "STEP2";
+                });
+            });
         } else if (currentstep == "INIT") {
             alert("Please select a crop.");
         } else {

@@ -129,3 +129,14 @@ html, body {
       right: 20px;
       z-index: 50;
     }
+
+#mousetooltipDiv {
+    position: absolute;
+    display: none;
+    background-color: white;
+    z-index: 1000;
+    padding: 5px;
+    border-color: black;
+    border-width: 2px;
+    border-style: solid;
+}

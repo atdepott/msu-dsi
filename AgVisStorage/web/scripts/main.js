@@ -12,6 +12,7 @@ require([
     "appConfig/defaults",
     "app/GeometryOperations", "app/ProductionTools",
     "app/RasterIdentify",
+    "app/BorderHelper",
     "dijit/layout/BorderContainer", "dijit/layout/ContentPane",
     "dijit/layout/AccordionContainer", "dojo/domReady!"
 ], function (
@@ -26,7 +27,8 @@ require([
     parser,on,
     config, 
     GeometryOperations, ProductionTools,
-    RasterIdentify
+    RasterIdentify,
+    BorderHelper
 ) {
     // call this here to ensure that map fills entire content pane
     parser.parse();
@@ -87,6 +89,7 @@ require([
     map.addLayers([layer]);
 
     var rasterIdentify = new RasterIdentify(map);
+    var borderHelper = new BorderHelper(map);
 
     // add the drawing toolbar (for polygon selections)
     var currentProdValue;
@@ -145,6 +148,28 @@ require([
         if (currentstep == "STEP1") {
 			rasterIdentify.pause();
             toolbar.activate(Draw.POLYGON);
+        } else if (currentstep == "INIT") {
+            alert("Please select a crop.");
+        } else {
+            alert("To choose another area, please clear and restart your analysis.");
+        }
+    });
+
+    $("#borderButton").button().click(function () {
+        if (currentstep == "STEP1") {
+            rasterIdentify.pause();
+            borderHelper.getBorder(function (graphic) {
+                studyArea = graphic.geometry;
+                productionTools.calculateProduction([graphic.geometry], $("#cropLayerInput").val(), function (result) {
+                    pixelCount = result.pixelCount;
+                    productionValue = result.productionValue;
+                    $("#pixelCount").html(result.pixelCount);
+                    $("#prodValue").html(result.productionValue + " mt");
+                    currentProdValue = result.productionValue;
+
+                    currentstep = "STEP2";
+                });
+            });
         } else if (currentstep == "INIT") {
             alert("Please select a crop.");
         } else {

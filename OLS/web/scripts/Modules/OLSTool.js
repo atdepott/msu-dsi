@@ -35,7 +35,7 @@ define([
         new Color([255, 255, 102]));
 
     // number of X variables the GP service is expecting
-    var expectedVariableCount = 5;
+    var expectedVariableCount = 10;
 
     return declare(null, {
         constructor: function (_map, _url) {
